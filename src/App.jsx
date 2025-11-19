@@ -73,6 +73,8 @@ import EReturnOrder from "./pages/orderManagement/EReturnOrder";
 import ECompletedOrder from "./pages/orderManagement/EComplitedOrder";
 import ECenceledOrder from "./pages/orderManagement/ECenceledOrder";
 import ERejectedOrder from "./pages/orderManagement/ERejectedOrder";
+import Employee from "./pages/cart/Employee";
+import Farmer from "./pages/cart/Farmer";
 
 export default function App() {
   return (
@@ -95,16 +97,40 @@ export default function App() {
             <Route path="/stack/damaged" element={<Damaged />} />
             <Route path="/stack/damaged/adddamaged" element={<Adddamaged />} />
 
+            <Route path="/cart/employee" element={<Employee />} />
+            <Route path="/cart/farmer" element={<Farmer />} />
+
             <Route path="/orders/farmer" element={<FarmerOrder />} />
             <Route path="/orders/byemployee" element={<ByEmployeeOrder />} />
             <Route path="/orders/farmer/return" element={<FReturnOrder />} />
-            <Route path="/orders/farmer/completed" element={<FCompletedOrder />} />
-            <Route path="/orders/farmer/canceled" element={<FCenceledOrder />} />
-            <Route path="/orders/farmer/rejected" element={<FRejectedOrder />} />
-            <Route path="/orders/byemployee/return" element={<EReturnOrder />} />
-            <Route path="/orders/byemployee/completed" element={<ECompletedOrder />} />
-            <Route path="/orders/byemployee/canceled" element={<ECenceledOrder />} />
-            <Route path="/orders/byemployee/rejected" element={<ERejectedOrder />} />
+            <Route
+              path="/orders/farmer/completed"
+              element={<FCompletedOrder />}
+            />
+            <Route
+              path="/orders/farmer/canceled"
+              element={<FCenceledOrder />}
+            />
+            <Route
+              path="/orders/farmer/rejected"
+              element={<FRejectedOrder />}
+            />
+            <Route
+              path="/orders/byemployee/return"
+              element={<EReturnOrder />}
+            />
+            <Route
+              path="/orders/byemployee/completed"
+              element={<ECompletedOrder />}
+            />
+            <Route
+              path="/orders/byemployee/canceled"
+              element={<ECenceledOrder />}
+            />
+            <Route
+              path="/orders/byemployee/rejected"
+              element={<ERejectedOrder />}
+            />
 
             <Route path="/farmers/all" element={<AllFarmers />} />
             <Route path="/farmer/all/addfarmer" element={<AddFarmer />} />
@@ -121,8 +147,11 @@ export default function App() {
 
             <Route path="/employees/manage" element={<ManageEmployee />} />
             <Route path="/employees/manage/addmanage" element={<AddManage />} />
-            <Route path="/employees/areamanager" element={<AreaManager/>}/>
-            <Route path="/employee/areamanager/addareamanager" element={<AddAreaManager/>}/>
+            <Route path="/employees/areamanager" element={<AreaManager />} />
+            <Route
+              path="/employee/areamanager/addareamanager"
+              element={<AddAreaManager />}
+            />
             <Route path="/employees/field" element={<FieldEmployee />} />
             <Route path="/employees/field/addfield" element={<Addfield />} />
 
@@ -152,26 +181,35 @@ export default function App() {
             <Route path="/data/crops" element={<CropList />} />
             <Route path="/data/crops/addcrop" element={<AddCrop />} />
             <Route path="/data/insects" element={<InsectsList />} />
-            <Route path="/data/insects/addinsert" element={<AddInsects/>} />
+            <Route path="/data/insects/addinsert" element={<AddInsects />} />
             <Route path="/data/fungus" element={<FungusList />} />
-            <Route path="/data/fungus/addfungus" element={<AddFungus/>}/>
+            <Route path="/data/fungus/addfungus" element={<AddFungus />} />
             <Route path="/data/herbicide" element={<Herbicide />} />
-            <Route path="/data/herbicide/addherbicide" element={<AddHerbicide/>}/>
+            <Route
+              path="/data/herbicide/addherbicide"
+              element={<AddHerbicide />}
+            />
             <Route path="/data/soil" element={<SoilList />} />
-            <Route path="/data/soil/addsoil" element={<AddSoil/>}/>
+            <Route path="/data/soil/addsoil" element={<AddSoil />} />
 
             <Route path="/complains/new" element={<NewComplaints />} />
-            <Route path="/complains/new/addnewcomplaints" element={<AddNewComplaints/>}/>
+            <Route
+              path="/complains/new/addnewcomplaints"
+              element={<AddNewComplaints />}
+            />
             <Route path="/complains/technical" element={<Technical />} />
-            <Route path="/complains/technical/addtechnical" element={<AddTech/>} />
+            <Route
+              path="/complains/technical/addtechnical"
+              element={<AddTech />}
+            />
             <Route path="/complains/pending" element={<PendingComplaints />} />
             <Route
               path="/complains/completed"
               element={<CompletedComplaints />}
             />
 
-            <Route path="/workmanagement/demo" element={<Demo/>}/>
-            <Route path="/workmanagement/visit" element={<Visit/>}/>
+            <Route path="/workmanagement/demo" element={<Demo />} />
+            <Route path="/workmanagement/visit" element={<Visit />} />
 
             <Route path="reports/monthly" element={<MonthlyReport />} />
             <Route path="reports/annual" element={<AnnualReport />} />

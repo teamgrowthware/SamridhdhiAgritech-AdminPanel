@@ -13,7 +13,7 @@ import {
   Megaphone,
   ChevronDown,
   ChevronRight,
-  ListChecks
+  ListChecks,
 } from "lucide-react";
 
 export default function Sidebar() {
@@ -183,15 +183,14 @@ export default function Sidebar() {
         <div className="mt-2">
           <MainButton
             section="cart"
-            icon={<Package size={16} className="inline-block mr-2" />}
+            icon={<ShoppingCart size={16} className="inline-block mr-2" />}
             label="Cart Management"
           />
           {open.cart && (
             <div className="pl-6 mt-1 space-y-1">
-              <Item to="/stack/available">Available</Item>
-              <Item to="/stack/finished">Finished</Item>
-              <Item to="/stack/lost">Lost</Item>
-              <Item to="/stack/damaged">Damaged</Item>
+              <Item to="/cart/employee">Employee</Item>
+              <Item to="/cart/farmer">Farmer</Item>
+             
             </div>
           )}
         </div>
