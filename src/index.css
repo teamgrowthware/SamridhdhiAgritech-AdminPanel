@@ -1,0 +1,9 @@
+@tailwind base;@tailwind components;@tailwind utilities;:root{--brand:#064e3b}html,body,#root{height:100%}body{@apply bg-gray-50 text-gray-800 font-sans}
+/* src/index.css ya global.css me daal do */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none; 
+  scrollbar-width: none;
+}
