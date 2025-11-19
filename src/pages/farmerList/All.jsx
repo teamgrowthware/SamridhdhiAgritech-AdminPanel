@@ -72,7 +72,7 @@ function All() {
 
             <NavLink
               to="/farmer/all/addfarmer"
-              className="bg-[#000000] text-white mt-3 px-3 py-2 rounded-lg font-semibold hover:bg-[#5e1aa1]"
+              className="bg-[#000000] text-white hover:bg-[#5e1aa1] mt-3 px-3 py-2 rounded-lg font-semibold "
             >
               <i className="fa-solid fa-plus"></i> Add Farmer
             </NavLink>

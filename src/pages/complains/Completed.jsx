@@ -105,11 +105,11 @@ function Complited() {
         <h1 className="mt-5 text-2xl font-semibold">Completed Complaints</h1>
 
         <div className="flex gap-2">
-          <NavLink className="bg-[#4B0082] text-white mt-10 mb-2 px-4 py-2 rounded-lg font-semibold">
+          <NavLink className="bg-[#CBD5E1] text-[#475569] mt-10 mb-2 px-4 py-2 rounded-lg font-semibold">
             <i className="fa-solid fa-filter mr-1"></i> Filter
           </NavLink>
 
-          <NavLink className="bg-[#4B0082] text-white mt-10 mb-2 px-4 py-2 rounded-lg font-semibold">
+          <NavLink className="bg-[#CBD5E1] text-[#475569] mt-10 mb-2 px-4 py-2 rounded-lg font-semibold">
             <i className="fa-solid fa-gear mr-1"></i> Settings
           </NavLink>
         </div>

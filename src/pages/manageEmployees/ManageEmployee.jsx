@@ -43,7 +43,7 @@ function ManageEmployee() {
     Target: "-",
     Designation: item.designation,
     Status: (
-      <span className="px-3 py-1 rounded-lg text-white bg-green-500">
+      <span className="">
         Active
       </span>
     ),
@@ -62,20 +62,16 @@ function ManageEmployee() {
   return (
     <div className="ml-64 bg-gray-100 min-h-screen">
       <div className="flex justify-between items-center mb-1">
-        <h1 className="mt-10 text-2xl font-semibold">Manage Employees</h1>
+        <h1 className="mt-10 text-2xl font-semibold">Managers </h1>
 
-        <div className="flex gap-2">
-          <NavLink className="bg-[#4B0082] text-white mt-10 mb-2 px-4 py-2 rounded-lg font-semibold">
+        <div className="flex gap-3">
+          <NavLink className="bg-[#CBD5E1] text-[#475569] mt-10 mb-2 px-4 py-2 rounded-lg font-semibold">
             <i className="fa-solid fa-filter mr-1"></i> Filter
-          </NavLink>
-
-          <NavLink className="bg-[#4B0082] text-white mt-10 mb-2 px-4 py-2 rounded-lg font-semibold">
-            <i className="fa-solid fa-gear mr-1"></i> Settings
           </NavLink>
 
           <NavLink
             to="/employees/manage/addmanage"
-            className="bg-[#4B0082] text-white mt-10 mb-2 px-4 py-2 rounded-lg font-semibold hover:bg-[#5e1aa1]"
+            className="bg-[#000000] text-white mt-10 mb-2 px-4 py-2 rounded-lg font-semibold hover:bg-[#5e1aa1]"
           >
             + Add Manager
           </NavLink>

@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import jsPDF from "jspdf";
 import TableLayout from "../layout/TableLayout";
 
-function Block() {
+function Demo() {
   const [stocks, setStocks] = useState([]);
 
   useEffect(() => {
@@ -15,10 +15,10 @@ function Block() {
     "Farmer ID",
     "Farmer Name",
     "Contact",
-    "Village",
-    "Tehsil",
-    "District",
-    "Status",
+    "Product Name",
+    "Employee",
+    "Manager",
+    "Crop Area",
     "Action",
   ];
 
@@ -40,10 +40,10 @@ function Block() {
     "Farmer ID": item.farmerId || "—",
     "Farmer Name": item.name,
     Contact: item.contact,
-    Village: item.village,
-    Tehsil: item.tehsil,
-    District: item.district,
-    State: "active",
+    "product Name": "jadu",
+    Employee: item.employee,
+    Manager: item.manager,
+    "Crop Area": item.cropArea,
 
     Action: (
       <div className="flex gap-3 justify-center">
@@ -65,7 +65,7 @@ function Block() {
     <>
       <div className="ml-64 bg-gray-100 min-h-screen ">
         <div className="flex justify-between items-center p-4">
-          <h1 className="mt-5 text-2xl font-semibold">Blocked Farmers</h1>
+          <h1 className="mt-5 text-2xl font-semibold">New Farmers</h1>
 
           <div className="flex gap-3 mt-2">
             <NavLink className="bg-[#CBD5E1] text-[#475569] mt-3 px-3 py-2 rounded-lg font-semibold">
@@ -83,7 +83,7 @@ function Block() {
         </div>
       </div>
 
-      {/* {openSmall && (
+      {openSmall && (
         <div onClick={() => setOpenSmall(false)} className="fixed inset-0 z-40">
           <div
             className="absolute bg-white shadow-md rounded-lg w-56 p-3 border flex flex-col gap-2"
@@ -98,7 +98,7 @@ function Block() {
                 setOpenSmall(false);
               }}
             >
-              <i class="fa-solid fa-arrows-rotate mr-1"></i> Convert To Defaulter
+              <i class="fa-solid fa-arrows-rotate mr-1"></i> Convert To Gold
             </button>
 
             <button
@@ -109,13 +109,23 @@ function Block() {
                 setOpenSmall(false);
               }}
             >
-             <i class="fa-solid fa-arrows-rotate mr-1"></i>  Convert To Block
+             <i class="fa-solid fa-arrows-rotate mr-1"></i>  Convert To Premium
+            </button>
+             <button
+              className="border p-2 rounded hover:bg-gray-100 whitespace-nowrap"
+              onClick={() => {
+                setBigPopupTitle("Convert To Block");
+                setOpenBig(true);
+                setOpenSmall(false);
+              }}
+            >
+             <i class="fa-solid fa-arrows-rotate mr-1"></i>  Convert To Normal
             </button>
           </div>
         </div>
-      )} */}
+      )}
 
-      {/* {openBig && (
+      {openBig && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
           <div className="bg-white p-6 w-[350px] rounded-2xl shadow-xl">
             <p className="text-xl font-bold text-center">{bigPopupTitle}</p>
@@ -139,9 +149,9 @@ function Block() {
             </div>
           </div>
         </div>
-      )} */}
+      )}
     </>
   );
 }
 
-export default Block;
+export default Demo;

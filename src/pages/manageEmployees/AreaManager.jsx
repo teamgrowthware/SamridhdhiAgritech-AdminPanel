@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import TableLayout from "../layout/TableLayout";
 
-function FieldEmployee() {
+function AreaManager() {
   const columns = [
-    "Employee ID",
-    "Employee Name",
+    "AreaManager ID",
+    "AreaManager Name",
     "Contact",
     "Area",
     "Team Size",
@@ -20,8 +20,7 @@ function FieldEmployee() {
 
   // Load from localStorage
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem("fieldemployee")) || [];
-    // console.log("----",JSON.stringify(stored))
+    const stored = JSON.parse(localStorage.getItem("areamanagers")) || [];
     setManagers(stored);
   }, []);
 
@@ -29,22 +28,22 @@ function FieldEmployee() {
   const editManager = (id) => {
     const manager = managers.find((item) => item.id === id);
     if (manager) {
-      localStorage.setItem("editfieldemployee", JSON.stringify(manager)); // FIXED
-      navigate("/employees/field/addfield");
+      localStorage.setItem("areamanagers", JSON.stringify(manager));
+      navigate("/employee/areamanager/addareamanager");
     }
   };
 
-  // Table Data
+  // Table Data Mapping
   const tableData = managers.map((item) => ({
-    "Employee ID": item.id,
-    "Employee Name": item.name,
+    "AreaManager ID": item.id,
+    "AreaManager Name": item.name,
     Contact: item.phone,
     Area: item.city,
     "Team Size": "-",
     Target: "-",
     Designation: item.designation,
     Status: (
-      <span className="">
+      <span className=" ">
         Active
       </span>
     ),
@@ -63,18 +62,19 @@ function FieldEmployee() {
   return (
     <div className="ml-64 bg-gray-100 min-h-screen">
       <div className="flex justify-between items-center mb-1">
-        <h1 className="mt-10 text-2xl font-semibold">Field Employees</h1>
-        
-         <div className="flex gap-3">
-                  <NavLink className="bg-[#CBD5E1] text-[#475569] mt-10 mb-2 px-4 py-2 rounded-lg font-semibold">
-                    <i className="fa-solid fa-filter mr-1"></i> Filter
-                  </NavLink>
-        <NavLink
-          to="/employees/field/addfield"
-          className="bg-[#000000] text-white mt-10 mb-2 px-4 py-2 rounded-lg font-semibold"
-        >
-          + Add Field Employee
-        </NavLink>
+        <h1 className="mt-10 text-2xl font-semibold">Area Managers </h1>
+
+        <div className="flex gap-3">
+          <NavLink className="bg-[#CBD5E1] text-[#475569] mt-10 mb-2 px-4 py-2 rounded-lg font-semibold">
+            <i className="fa-solid fa-filter mr-1"></i> Filter
+          </NavLink>
+
+          <NavLink
+            to="/employee/areamanager/addareamanager"
+            className="bg-[#000000] text-white mt-10 mb-2 px-4 py-2 rounded-lg font-semibold hover:bg-[#5e1aa1]"
+          >
+            + Add Area Manager
+          </NavLink>
         </div>
       </div>
 
@@ -83,7 +83,7 @@ function FieldEmployee() {
           <TableLayout columns={columns} data={tableData} />
         ) : (
           <p className="text-center text-gray-500 py-6">
-            No employee added yet.
+            No manager added yet. Click “+ Add Area Manager” to create one.
           </p>
         )}
       </div>
@@ -91,4 +91,4 @@ function FieldEmployee() {
   );
 }
 
-export default FieldEmployee;
+export default AreaManager;

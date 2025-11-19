@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import jsPDF from "jspdf";
 import TableLayout from "../layout/TableLayout";
 
-function Completed() {
+function FCenceledOrder() {
   const defaultData = [
     {
       orderId: "#jan4345",
@@ -84,7 +84,7 @@ function Completed() {
     <>
       <div className="ml-64 bg-gray-100 min-h-screen">
         <div className="flex justify-between items-center p-4">
-          <h1 className="mt-5 text-2xl font-semibold">Completed Order</h1>
+          <h1 className="mt-5 text-2xl font-semibold">Farmer Canceled Order</h1>
 
           <div className="flex gap-3 mt-2">
             <NavLink className="bg-[#CBD5E1] text-[#475569] mt-3 mb-1 px-3 py-2 rounded-lg font-semibold">
@@ -111,40 +111,16 @@ function Completed() {
             style={{ top: popupPos.top, left: popupPos.left }}
             onClick={(e) => e.stopPropagation()}
           >
-     
             <button
               className="border p-2 rounded hover:bg-gray-100"
               onClick={() => {
-                setBigPopupTitle("Convert to Cancel");
+                setBigPopupTitle("Re-Order");
                 setOpenBig(true);
                 setOpenSmall(false);
               }}
             >
-            <i class="fa-solid fa-xmark"></i>  Convert To Cancel
+            <i class="fa-solid fa-rotate-right"></i> Re-Order
             </button>
-
-            <button
-              className="border p-2 rounded hover:bg-gray-100"
-              onClick={() => {
-                setBigPopupTitle("Convert to Return");
-                setOpenBig(true);
-                setOpenSmall(false);
-              }}
-            >
-             <i class="fa-solid fa-undo"></i> Convert To Return
-            </button>
-
-            <button
-              className="border p-2 rounded hover:bg-gray-100 whitespace-nowrap"
-              onClick={() => {
-                setBigPopupTitle("Convert to Fresh Order");
-                setOpenBig(true);
-                setOpenSmall(false);
-              }}
-            >
-              <i class="fa-solid fa-arrows-rotate mr-1"></i>Convert To Fresh Order
-            </button>
-
             <button
               className="border p-2 rounded hover:bg-gray-100"
               onClick={() => {
@@ -152,7 +128,7 @@ function Completed() {
                 setOpenSmall(false);
               }}
             >
-             <i class="fa-solid fa-file-arrow-down"></i> Download PDF
+            <i class="fa-solid fa-file-arrow-down"></i>  Download PDF
             </button>
           </div>
         </div>
@@ -195,4 +171,4 @@ function Completed() {
   );
 }
 
-export default Completed;
+export default FCenceledOrder;

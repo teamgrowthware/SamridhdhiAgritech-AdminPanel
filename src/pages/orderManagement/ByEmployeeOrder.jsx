@@ -3,7 +3,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import TableLayout from "../layout/TableLayout";
 import jsPDF from "jspdf";
 
-function New() {
+function ByEmployeeOrder() {
   const stock =[ {
           farmerId: "FM001",
           invoice: "INV-9032",
@@ -112,7 +112,7 @@ function New() {
     <>
       <div className="ml-64 bg-gray-100 min-h-screen">
         <div className="flex justify-between items-center p-4">
-          <h1 className="mt-5 text-2xl font-semibold">New Order</h1>
+          <h1 className="mt-5 text-2xl font-semibold">By Employee Order</h1>
 
           <div className="flex gap-3">
             <NavLink className="bg-[#CBD5E1] text-[#475569] mt-5 mb-2 px-3 py-2 rounded-lg font-semibold">
@@ -228,4 +228,4 @@ function New() {
   );
 }
 
-export default New;
+export default ByEmployeeOrder;

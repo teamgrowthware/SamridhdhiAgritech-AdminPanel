@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import jsPDF from "jspdf";
 import TableLayout from "../layout/TableLayout";
 
-function Rejected() {
+function ERejectedOrder() {
   const defaultData = [
     {
       orderId: "#jan4345",
@@ -84,7 +84,7 @@ function Rejected() {
     <>
       <div className="ml-64 bg-gray-100 min-h-screen">
         <div className="flex justify-between items-center p-4">
-          <h1 className="mt-5 text-2xl font-semibold">Rejected Order</h1>
+          <h1 className="mt-5 text-2xl font-semibold">Employee Rejected Order</h1>
 
           <div className="flex gap-3 mt-2">
             <NavLink className="bg-[#CBD5E1] text-[#475569] mt-3 mb-1 px-3 py-2 rounded-lg font-semibold">
@@ -171,4 +171,4 @@ function Rejected() {
   );
 }
 
-export default Rejected;
+export default ERejectedOrder;
