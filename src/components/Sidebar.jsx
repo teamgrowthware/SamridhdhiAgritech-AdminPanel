@@ -85,7 +85,7 @@ export default function Sidebar() {
     workmanagement:false,
     reports: false,
     settings: false,
-
+    cart:false,
     farmerOrders: false,
     employeeOrders: false,
   });
@@ -171,6 +171,22 @@ export default function Sidebar() {
             label="Stock Management"
           />
           {open.stack && (
+            <div className="pl-6 mt-1 space-y-1">
+              <Item to="/stack/available">Available</Item>
+              <Item to="/stack/finished">Finished</Item>
+              <Item to="/stack/lost">Lost</Item>
+              <Item to="/stack/damaged">Damaged</Item>
+            </div>
+          )}
+        </div>
+        {/* ====================== CART  ===================== */}
+        <div className="mt-2">
+          <MainButton
+            section="cart"
+            icon={<Package size={16} className="inline-block mr-2" />}
+            label="Cart Management"
+          />
+          {open.cart && (
             <div className="pl-6 mt-1 space-y-1">
               <Item to="/stack/available">Available</Item>
               <Item to="/stack/finished">Finished</Item>
