@@ -111,10 +111,22 @@ export default function Sidebar() {
   // ============================
   // UI COMPONENTS
   // ============================
+//   <div
+//   className="
+//     flex items-center justify-center 
+//     bg-red-500 text-white 
+//     rounded-full 
+//     w-5 h-5 text-[10px]     /* mobile */
+//     sm:w-6 sm:h-6 sm:text-xs /* small screens */
+//     md:w-7 md:h-7 md:text-sm /* tablet */
+//   "
+// >
+//   {count}
+// </div>
 
   const CountBadge = ({ count }) =>
     count > 0 ? (
-      <span className="ml-2 bg-red-500 text-white text-xs px-2 py-[1px] rounded-full">
+      <span className="ml-2 bg-red-500 text-white text-xs px-2 py-[1px] rounded-full sm:w-6 sm:h-6 sm:text-xs md:w-7 md:h-7 md:text-sm ">
         {count}
       </span>
     ) : null;
