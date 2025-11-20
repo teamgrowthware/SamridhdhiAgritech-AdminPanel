@@ -1,12 +1,20 @@
 import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
-function AddCategory({ initialData = {}, title, onSubmit, onCancel }) {
+function AddCategory({ initialData = {}, title, onSubmit }) {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const dynamicTitle = location.state?.formTitle || title;
+
+  const editItem = location.state?.editItem || null;
+
   const [formData, setFormData] = useState({
     CategoryType: "",
     CategoryName: "",
     Image: "",
     id: null,
-    ...initialData,
+    ...editItem,
   });
 
   const [errors, setErrors] = useState({
@@ -16,8 +24,10 @@ function AddCategory({ initialData = {}, title, onSubmit, onCancel }) {
   });
 
   useEffect(() => {
-    setFormData((prev) => ({ ...prev, ...initialData }));
-  }, [initialData]);
+    if (editItem) {
+      setFormData(editItem);
+    }
+  }, [editItem]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -56,20 +66,33 @@ function AddCategory({ initialData = {}, title, onSubmit, onCancel }) {
     e.preventDefault();
     if (!validate()) return;
 
+    let saved = JSON.parse(localStorage.getItem("categories")) || [];
+
     const dataToSend = {
       ...formData,
       id: formData.id || Date.now(),
     };
 
-    onSubmit(dataToSend);
+    // ✔ If editing → replace item
+    if (editItem) {
+      saved = saved.map((c) => (c.id === dataToSend.id ? dataToSend : c));
+    } else {
+      // ✔ If adding → push new item
+      saved.push(dataToSend);
+    }
+
+    // ⭐ Save to localStorage
+    localStorage.setItem("categories", JSON.stringify(saved));
+
+    // Back to previous page
+    navigate("/products/category");
   };
 
   return (
-    <div className="bg-white p-8 rounded-2xl shadow-lg max-w-lg mx-auto">
-      <h1 className="text-2xl font-semibold text-center mb-6">{title}</h1>
+    <div className="bg-white p-8 rounded-2xl shadow-lg max-w-lg mx-auto mt-12 ">
+      <h1 className="text-2xl font-semibold text-center mb-6">{dynamicTitle}</h1>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Category Type */}
         <div>
           <label className="block font-medium mb-1">Category Type</label>
           <input
@@ -85,7 +108,6 @@ function AddCategory({ initialData = {}, title, onSubmit, onCancel }) {
           )}
         </div>
 
-        {/* Category Name */}
         <div>
           <label className="block font-medium mb-1">Category Name</label>
           <input
@@ -101,7 +123,6 @@ function AddCategory({ initialData = {}, title, onSubmit, onCancel }) {
           )}
         </div>
 
-        {/* Image Upload */}
         <div>
           <label className="block font-medium mb-1">Category Image</label>
           <input
@@ -122,11 +143,10 @@ function AddCategory({ initialData = {}, title, onSubmit, onCancel }) {
           />
         )}
 
-        {/* Buttons */}
         <div className="flex justify-center gap-6 mt-6">
           <button
             type="button"
-            onClick={onCancel}
+            onClick={() => navigate("/products/category")}
             className="bg-gray-400 text-white px-16 py-2 rounded-lg"
           >
             Cancel

@@ -1,7 +1,7 @@
 import React from "react";
 import { Bell, Search, Menu } from "lucide-react";
 
-const Topbar = () => {
+const Topbar = ({ searchText, setSearchText }) => {
   return (
     <header className="fixed top-0 left-0 w-full bg-white border-b border-gray-200 shadow-sm z-50">
       <div className="flex justify-between items-center px-6 py-3">
@@ -19,13 +19,14 @@ const Topbar = () => {
           <input
             type="text"
             placeholder="Search"
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
             className="bg-transparent w-full focus:outline-none text-sm text-gray-700"
           />
         </div>
 
         {/* Right - Notification + Profile */}
         <div className="flex items-center space-x-6">
-          {/* Notification Icon */}
           <div className="relative cursor-pointer hover:bg-green-50 p-2 rounded-full transition-all">
             <Bell size={20} className="text-gray-700" />
             <span className="absolute top-1 right-1 bg-red-500 text-white text-[10px] font-bold rounded-full px-1.5">
@@ -33,10 +34,9 @@ const Topbar = () => {
             </span>
           </div>
 
-          {/* Profile */}
           <div className="flex items-center space-x-3 cursor-pointer hover:bg-green-50 px-3 py-2 rounded-full transition-all">
             <img
-              src="https://img.freepik.com/free-photo/portrait-white-man-isolated_53876-40306.jpg?semt=ais_hybrid&w=740&q=80"
+              src="https://img.freepik.com/free-photo/portrait-white-man-isolated_53876-40306.jpg"
               alt="Admin"
               className="w-9 h-9 rounded-full border border-gray-300 object-cover"
             />
@@ -55,3 +55,4 @@ const Topbar = () => {
 };
 
 export default Topbar;
+

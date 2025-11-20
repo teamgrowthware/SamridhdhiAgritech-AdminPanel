@@ -70,7 +70,7 @@ function AreaManager() {
           </NavLink>
 
           <NavLink
-            to="/employees/areamanager/addareamanager"
+            to="/employee/areamanager/addareamanager"
             className="bg-[#000000] text-white mt-10 mb-2 px-4 py-2 rounded-lg font-semibold hover:bg-[#5e1aa1]"
           >
             + Add Area Manager

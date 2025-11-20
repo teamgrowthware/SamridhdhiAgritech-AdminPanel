@@ -149,7 +149,7 @@ export default function App() {
             <Route path="/employees/manage/addmanage" element={<AddManage />} />
             <Route path="/employees/areamanager" element={<AreaManager />} />
             <Route
-              path="/employees/areamanager/addareamanager"
+              path="/employee/areamanager/addareamanager"
               element={<AddAreaManager />}
             />
             <Route path="/employees/field" element={<FieldEmployee />} />

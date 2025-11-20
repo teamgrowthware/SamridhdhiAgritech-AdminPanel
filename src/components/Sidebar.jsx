@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
@@ -16,7 +15,7 @@ import {
   ListChecks,
 } from "lucide-react";
 
-export default function Sidebar() {
+export default function Sidebar({ setMenuItems }) {
   const location = useLocation();
 
   // ============================
@@ -29,6 +28,43 @@ export default function Sidebar() {
     complains: { new: 4, technical: 1, pending: 2, completed: 0 },
     workmanagement:{ demo:2, visit:3},
   });
+
+useEffect(() => {
+   const items = [
+      { label: "Dashboard", to: "/" },
+      { label: "Available Stock", to: "/stack/available" },
+      { label: "Finished Stock", to: "/stack/finished" },
+      { label: "Lost Stock", to: "/stack/lost" },
+      { label: "Damaged Stock", to: "/stack/damaged" },
+
+      { label: "Employee Cart", to: "/cart/employee" },
+      { label: "Farmer Cart", to: "/cart/farmer" },
+
+      { label: "Farmer Orders", to: "/orders/farmer" },
+      { label: "Farmer Return", to: "/orders/farmer/return" },
+      { label: "Farmer Canceled", to: "/orders/farmer/canceled" },
+      { label: "Farmer Rejected", to: "/orders/farmer/rejected" },
+      { label: "Farmer Completed", to: "/orders/farmer/completed" },
+
+      { label: "Employee Orders", to: "/orders/byemployee" },
+      { label: "Employee Return", to: "/orders/byemployee/return" },
+      { label: "Employee Canceled", to: "/orders/byemployee/canceled" },
+      { label: "Employee Rejected", to: "/orders/byemployee/rejected" },
+      { label: "Employee Completed", to: "/orders/byemployee/completed" },
+
+      { label: "Demo Work", to: "/workmanagement/demo" },
+      { label: "Visit Work", to: "/workmanagement/visit" },
+
+      { label: "Pending Payment", to: "/payment/pending" },
+      { label: "Upcoming Payment", to: "/payment/upcoming" },
+
+      { label: "New Complaint", to: "/complains/new" },
+      { label: "Technical Complaint", to: "/complains/technical" },
+      { label: "Pending Complaint", to: "/complains/pending" },
+      { label: "Completed Complaint", to: "/complains/completed" },
+    ];
+    setMenuItems(items);
+   }, []);
 
   // ============================
   // 🔥 HIDE COUNT AFTER VISITING PAGE
@@ -113,9 +149,9 @@ export default function Sidebar() {
   // ============================
 //   <div
 //   className="
-//     flex items-center justify-center 
-//     bg-red-500 text-white 
-//     rounded-full 
+//     flex items-center justify-center
+//     bg-red-500 text-white
+//     rounded-full
 //     w-5 h-5 text-[10px]     /* mobile */
 //     sm:w-6 sm:h-6 sm:text-xs /* small screens */
 //     md:w-7 md:h-7 md:text-sm /* tablet */
@@ -169,12 +205,11 @@ export default function Sidebar() {
     <aside className="fixed left-0 top-[64px] w-64 h-[calc(100%-64px)] bg-white border-r border-gray-200 overflow-y-auto scrollbar-hide pt-4">
       <nav className="px-2 py-3">
 {/* ====================== DASHBOARD  ===================== */}
-      
+
         <Item to="/" count={0}>
           <LayoutDashboard size={16} className="inline-block mr-2" /> Dashboard
         </Item>
 
- 
        {/* ====================== STOCK  ===================== */}
         <div className="mt-2">
           <MainButton
@@ -202,7 +237,7 @@ export default function Sidebar() {
             <div className="pl-6 mt-1 space-y-1">
               <Item to="/cart/employee">Employee</Item>
               <Item to="/cart/farmer">Farmer</Item>
-             
+
             </div>
           )}
         </div>
@@ -258,7 +293,7 @@ export default function Sidebar() {
         </div>
 
 {/* ====================== FARMERS LIST ===================== */}
-      
+
         <div className="mt-2">
           <MainButton
             section="farmers"
@@ -293,8 +328,6 @@ export default function Sidebar() {
             </div>
           )}
         </div>
-
-
 
         {/* ====================== MANAGE EMPLOYEES ===================== */}
         <div className="mt-2">
@@ -362,9 +395,6 @@ export default function Sidebar() {
             </div>
           )}
         </div>
-
-       
-
 
 {/* ====================== SETTINGS  ===================== */}
         <div className="mt-2">
@@ -437,4 +467,5 @@ export default function Sidebar() {
     </aside>
   );
 }
+
 

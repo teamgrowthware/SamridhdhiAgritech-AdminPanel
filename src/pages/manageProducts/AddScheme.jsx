@@ -59,7 +59,7 @@ function AddScheme() {
     localStorage.setItem("addScheme", JSON.stringify([...stored, formData]));
 
     toast.success("Scheme added successfully!");
-    navigate("/schemes/list");
+    navigate("/products/scheme");
   };
 
   return (
@@ -137,7 +137,7 @@ function AddScheme() {
           <div className="flex justify-center gap-6 mt-5">
             <button
               type="button"
-              onClick={() => navigate("/schemes/list")}
+              onClick={() => navigate("/products/scheme")}
               className="bg-gray-400 text-white px-12 py-2 rounded-lg"
             >
               Cancel

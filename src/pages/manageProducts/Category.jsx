@@ -82,6 +82,7 @@ function Category() {
       <div className="flex justify-between items-center mb-3">
         <h1 className="mt-5 text-2xl font-semibold">Category</h1>
         <div className="flex gap-2">
+
           <NavLink className="bg-[#CBD5E1] text-[#475569] mt-10 mb-2 px-4 py-2 rounded-lg font-semibold">
             <i className="fa-solid fa-filter mr-1"></i> Filter
           </NavLink>
@@ -89,6 +90,8 @@ function Category() {
           <NavLink className="bg-[#CBD5E1] text-[#475569] mt-10 mb-2 px-4 py-2 rounded-lg font-semibold">
             <i className="fa-solid fa-gear mr-1"></i> Settings
           </NavLink>
+
+          {/* ADD CATEGORY BUTTONS */}
           <button
             className="bg-[#000000] text-white hover:bg-[#5e1aa1] mt-10 mb-2 px-4 py-2 rounded-lg font-semibold"
             onClick={() =>
@@ -99,6 +102,7 @@ function Category() {
           >
             + Add Category
           </button>
+
           <button
             className="bg-[#000000] text-white hover:bg-[#5e1aa1] mt-10 mb-2 px-4 py-2 rounded-lg font-semibold"
             onClick={() =>
@@ -109,6 +113,7 @@ function Category() {
           >
             + Add Main Category
           </button>
+
           <button
             className="bg-[#000000] text-white hover:bg-[#5e1aa1] mt-10 mb-2 px-4 py-2 rounded-lg font-semibold"
             onClick={() =>
