@@ -20,7 +20,7 @@ function ManageEmployee() {
 
   // Load from localStorage
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem("managers")) || [];
+    const stored = JSON.parse(localStorage.getItem("manager")) || [];
     setManagers(stored);
   }, []);
 
@@ -28,7 +28,7 @@ function ManageEmployee() {
   const editManager = (id) => {
     const manager = managers.find((item) => item.id === id);
     if (manager) {
-      localStorage.setItem("editmanagers", JSON.stringify(manager));
+      localStorage.setItem("editmanager", JSON.stringify(manager));
       navigate("/employees/manage/addmanage");
     }
   };

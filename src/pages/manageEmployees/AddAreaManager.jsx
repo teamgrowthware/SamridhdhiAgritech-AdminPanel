@@ -70,7 +70,7 @@ const AddAreaManager = () => {
     }
   };
   useEffect(() => {
-  const edit = JSON.parse(localStorage.getItem("areamanagers"));
+  const edit = JSON.parse(localStorage.getItem("areamanager"));
   if (edit) {
     setFormData(edit);
   }
@@ -132,22 +132,22 @@ const AddAreaManager = () => {
 
   if (!validate()) return;
 
-  let saved = JSON.parse(localStorage.getItem("areamanagers")) || [];
-  const editData = JSON.parse(localStorage.getItem("areamanagers"));
+  let saved = JSON.parse(localStorage.getItem("areamanager")) || [];
+  const editData = JSON.parse(localStorage.getItem("areamanager"));
 
   // If editing
   if (editData) {
     saved = saved.map(emp =>
       emp.id === editData.id ? { ...editData, ...formData } : emp
     );
-    localStorage.removeItem("areamanagers");
+    localStorage.removeItem("areamanager");
   } 
   else {
     const newId = `AM-${String(saved.length + 1).padStart(4, "0")}`;
     saved.push({ id: newId, ...formData });
   }
 
-  localStorage.setItem("areamanagers", JSON.stringify(saved));
+  localStorage.setItem("areamanager", JSON.stringify(saved));
 
   navigate(-1);
 };

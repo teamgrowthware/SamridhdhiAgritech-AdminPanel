@@ -20,7 +20,7 @@ function AreaManager() {
 
   // Load from localStorage
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem("areamanagers")) || [];
+    const stored = JSON.parse(localStorage.getItem("areamanager")) || [];
     setManagers(stored);
   }, []);
 
@@ -28,8 +28,8 @@ function AreaManager() {
   const editManager = (id) => {
     const manager = managers.find((item) => item.id === id);
     if (manager) {
-      localStorage.setItem("areamanagers", JSON.stringify(manager));
-      navigate("/employee/areamanager/addareamanager");
+      localStorage.setItem("areamanager", JSON.stringify(manager));
+      navigate("/employees/areamanager/addareamanager");
     }
   };
 
@@ -70,7 +70,7 @@ function AreaManager() {
           </NavLink>
 
           <NavLink
-            to="/employee/areamanager/addareamanager"
+            to="/employees/areamanager/addareamanager"
             className="bg-[#000000] text-white mt-10 mb-2 px-4 py-2 rounded-lg font-semibold hover:bg-[#5e1aa1]"
           >
             + Add Area Manager

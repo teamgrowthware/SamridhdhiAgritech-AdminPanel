@@ -70,7 +70,7 @@ const Addfield = () => {
     }
   };
   useEffect(() => {
-  const edit = JSON.parse(localStorage.getItem("fieldemployee"));
+  const edit = JSON.parse(localStorage.getItem("fieldemployees"));
   if (edit) {
     setFormData(edit);
   }
@@ -132,22 +132,22 @@ const Addfield = () => {
 
   if (!validate()) return;
 
-  let saved = JSON.parse(localStorage.getItem("fieldemployee")) || [];
-  const editData = JSON.parse(localStorage.getItem("fieldemployee"));
+  let saved = JSON.parse(localStorage.getItem("fieldemployees")) || [];
+  const editData = JSON.parse(localStorage.getItem("fieldemployees"));
 
   // If editing
   if (editData) {
     saved = saved.map(emp =>
       emp.id === editData.id ? { ...editData, ...formData } : emp
     );
-    localStorage.removeItem("fieldemployee");
+    localStorage.removeItem("fieldemployees");
   } 
   else {
     const newId = `FE-${String(saved.length + 1).padStart(4, "0")}`;
     saved.push({ id: newId, ...formData });
   }
 
-  localStorage.setItem("fieldemployee", JSON.stringify(saved));
+  localStorage.setItem("fieldemployees", JSON.stringify(saved));
 
   navigate(-1);
 };

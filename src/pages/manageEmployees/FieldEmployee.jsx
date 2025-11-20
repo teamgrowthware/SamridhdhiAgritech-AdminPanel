@@ -20,7 +20,7 @@ function FieldEmployee() {
 
   // Load from localStorage
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem("fieldemployee")) || [];
+    const stored = JSON.parse(localStorage.getItem("fieldemployees")) || [];
     // console.log("----",JSON.stringify(stored))
     setManagers(stored);
   }, []);
@@ -29,7 +29,7 @@ function FieldEmployee() {
   const editManager = (id) => {
     const manager = managers.find((item) => item.id === id);
     if (manager) {
-      localStorage.setItem("editfieldemployee", JSON.stringify(manager)); // FIXED
+      localStorage.setItem("editfieldemployees", JSON.stringify(manager)); // FIXED
       navigate("/employees/field/addfield");
     }
   };

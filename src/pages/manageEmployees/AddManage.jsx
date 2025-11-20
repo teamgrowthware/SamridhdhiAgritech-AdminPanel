@@ -117,11 +117,11 @@ const AddManage = () => {
     const { profilePic, aadhaar, passbook, marksheet, pan, ...cleanData } =
       formData;
 
-    const saved = JSON.parse(localStorage.getItem("managers")) || [];
+    const saved = JSON.parse(localStorage.getItem("manager")) || [];
    const newId = `M-${String(saved.length + 1).padStart(4, "0")}`;
 
     saved.push({ id: newId, ...cleanData });
-    localStorage.setItem("managers", JSON.stringify(saved));
+    localStorage.setItem("manager", JSON.stringify(saved));
 
     navigate("/employees/manage");
   };
