@@ -61,7 +61,7 @@ function FieldEmployee() {
   }));
 
   return (
-    <div className="ml-64 bg-gray-100 min-h-screen">
+    <div className="ml-64  min-h-screen">
       <div className="flex justify-between items-center mb-1">
         <h1 className="mt-10 text-2xl font-semibold">Field Employees</h1>
         

@@ -1,14 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
-import jsPDF from "jspdf";
+import { NavLink, useNavigate } from "react-router-dom";
 import TableLayout from "../layout/TableLayout";
 
 function Normal() {
+  const navigate = useNavigate();
   const [stocks, setStocks] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
 
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem("farmers")) || [];
-    setStocks(data);
+    const modified = data.map((f) => ({
+      ...f,
+      status: f.status || "Active",
+    }));
+    setStocks(modified);
+    setFilteredData(modified);
   }, []);
 
   const columns = [
@@ -36,14 +42,64 @@ function Normal() {
   const [openBig, setOpenBig] = useState(false);
   const [bigPopupTitle, setBigPopupTitle] = useState("");
 
-  const modifiedStocks = stocks.map((item) => ({
+  const [filterPopup, setFilterPopup] = useState(false);
+
+  // FILTER STATES
+  const [districtFilter, setDistrictFilter] = useState("");
+  const [tehsilFilter, setTehsilFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
+  const [sortByName, setSortByName] = useState("");
+
+  // UNIQUE DISTRICTS + TEHSILS
+  const districtList = [...new Set(stocks.map((f) => f.district))];
+  const tehsilList = [...new Set(stocks.map((f) => f.tehsil))];
+
+  // APPLY FILTERS
+  const applyFilters = () => {
+    let data = [...stocks];
+
+    if (districtFilter) {
+      data = data.filter((f) => f.district === districtFilter);
+    }
+
+    if (tehsilFilter) {
+      data = data.filter((f) => f.tehsil === tehsilFilter);
+    }
+
+    if (statusFilter) {
+      data = data.filter((f) => f.status === statusFilter);
+    }
+
+    // SORT NAME
+    if (sortByName === "asc") {
+      data.sort((a, b) => a.name.localeCompare(b.name));
+    } else if (sortByName === "desc") {
+      data.sort((a, b) => b.name.localeCompare(a.name));
+    }
+
+    setFilteredData(data);
+    setFilterPopup(false);
+  };
+
+  // CLEAR FILTERS
+  const clearFilters = () => {
+    setDistrictFilter("");
+    setTehsilFilter("");
+    setStatusFilter("");
+    setSortByName("");
+    setFilteredData(stocks);
+    setFilterPopup(false);
+    navigate(-1);
+  };
+
+  const modifiedStocks = filteredData.map((item) => ({
     "Farmer ID": item.farmerId || "—",
     "Farmer Name": item.name,
     Contact: item.contact,
     Village: item.village,
     Tehsil: item.tehsil,
     District: item.district,
-    State: "active",
+    Status: item.status,
 
     Action: (
       <div className="flex gap-3 justify-center">
@@ -63,12 +119,15 @@ function Normal() {
 
   return (
     <>
-      <div className="ml-64 bg-gray-100 min-h-screen ">
+      <div className="ml-64  min-h-screen ">
         <div className="flex justify-between items-center p-4">
           <h1 className="mt-5 text-2xl font-semibold">Normal Farmers</h1>
 
           <div className="flex gap-3 mt-2">
-            <NavLink className="bg-[#CBD5E1] text-[#475569] mt-3 px-3 py-2 rounded-lg font-semibold">
+            <NavLink
+              onClick={() => setFilterPopup(true)}
+              className="bg-[#CBD5E1] text-[#475569] mt-3 px-3 py-2 rounded-lg font-semibold"
+            >
               <i className="fa-solid fa-filter mr-1"></i> Filter
             </NavLink>
 
@@ -109,7 +168,7 @@ function Normal() {
                 setOpenSmall(false);
               }}
             >
-             <i class="fa-solid fa-arrows-rotate mr-1"></i>  Convert To Block
+              <i class="fa-solid fa-arrows-rotate mr-1"></i> Convert To Block
             </button>
           </div>
         </div>
@@ -131,10 +190,87 @@ function Normal() {
                 Cancel
               </button>
 
-              <button
-                className="px-10 py-2 rounded-lg bg-gray-900 text-white hover:bg-white hover:text-black hover:border-gray-900 border transition-all"
-              >
+              <button className="px-10 py-2 rounded-lg bg-gray-900 text-white hover:bg-white hover:text-black hover:border-gray-900 border transition-all">
                 Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* FILTER POPUP */}
+      {filterPopup && (
+        <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center z-50">
+          <div className="bg-white w-[350px] rounded-xl p-5 shadow-xl">
+            <h2 className="text-xl font-bold mb-4 text-center">Filters</h2>
+
+            {/* DISTRICT */}
+            <label className="font-semibold">District</label>
+            <select
+              className="border w-full p-2 rounded mt-1"
+              value={districtFilter}
+              onChange={(e) => setDistrictFilter(e.target.value)}
+            >
+              <option value="">All</option>
+              {districtList.map((d, i) => (
+                <option key={i} value={d}>
+                  {d}
+                </option>
+              ))}
+            </select>
+
+            {/* TEHSIL */}
+            <label className="font-semibold mt-3 block">Tehsil</label>
+            <select
+              className="border w-full p-2 rounded mt-1"
+              value={tehsilFilter}
+              onChange={(e) => setTehsilFilter(e.target.value)}
+            >
+              <option value="">All</option>
+              {tehsilList.map((t, i) => (
+                <option key={i} value={t}>
+                  {t}
+                </option>
+              ))}
+            </select>
+
+            {/* STATUS */}
+            <label className="font-semibold mt-3 block">Status</label>
+            <select
+              className="border w-full p-2 rounded mt-1"
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+            >
+              <option value="">All</option>
+              <option value="Active">Active</option>
+              <option value="Unactive">Unactive</option>
+            </select>
+
+            {/* NAME SORT */}
+            <label className="font-semibold mt-3 block">Sort by Name</label>
+            <select
+              className="border w-full p-2 rounded mt-1"
+              value={sortByName}
+              onChange={(e) => setSortByName(e.target.value)}
+            >
+              <option value="">None</option>
+              <option value="asc">A → Z</option>
+              <option value="desc">Z → A</option>
+            </select>
+
+            <div className="flex justify-between mt-5">
+              <button
+                className="px-14 py-2 bg-gray-300 rounded-lg"
+                onClick={clearFilters}
+              >
+                Clear
+              </button>
+
+              <button
+                className="px-14 py-2 bg-gray-900 text-white rounded-lg"
+                onClick={applyFilters}
+              >
+                Apply
               </button>
             </div>
           </div>

@@ -25,7 +25,7 @@ export default function Layout() {
 
         <main className="p-6 bg-gray-50 flex-1 overflow-auto">
           {searchText && (
-            <div className="bg-white p-4 rounded shadow mb-4">
+            <div className=" p-4 rounded shadow mb-4">
               <h2 className="text-xl font-bold mb-2">Search Results</h2>
 
               {filteredItems.length > 0 ? (

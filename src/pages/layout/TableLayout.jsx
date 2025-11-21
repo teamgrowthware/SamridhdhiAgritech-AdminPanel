@@ -10,7 +10,7 @@ function TableLayout({ columns, data }) {
             {columns.map((col, index) => (
               <th
                 key={index}
-                className="px-4 py-3 text-left text-lg font-semibold tracking-wide  "
+                className="px-4 py-3 text-left text-sm font-semibold tracking-wide  "
               >
                 {col}
               </th>

@@ -38,7 +38,7 @@ export default function Dashboard() {
 
 
   return (
-    <div className="ml-64 bg-gray-100 min-h-screen pt-8">
+    <div className="ml-64  min-h-screen pt-8">
       {/* STATS CARDS */}
       <div className="grid grid-cols-4 gap-4 mb-6">
         {[

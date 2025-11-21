@@ -12,6 +12,7 @@ function Damaged() {
     "Manufacture Cost",
     "Net Quantity",
     "Batch Number",
+    "Expiry Date",
     "Action",
     "Add Stock",
   ];
@@ -47,6 +48,7 @@ function Damaged() {
     "Manufacture Cost": item.ManufactureCost,
     "Net Quantity": item.NetQuantity,
     "Batch Number": item.BatchNumber,
+    "Expiry Date":item.ExpiryDate,
     Action: (
       <div className="flex gap-3 justify-center">
         <button
@@ -60,7 +62,7 @@ function Damaged() {
           className="text-yellow-500 hover:text-yellow-700"
           title="Edit Stock"
         >
-          <i className="fas fa-edit text-lg"></i>
+         <i className="fa-solid fa-ellipsis-vertical text-xl cursor-pointer"></i>
         </button>
       </div>
     ),
@@ -75,7 +77,7 @@ function Damaged() {
   }));
 
   return (
-    <div className="ml-64 bg-gray-100 min-h-screen">
+    <div className="ml-64  min-h-screen">
       <div className="flex justify-between items-center mb-1">
         <h1 className="mt-5 text-2xl font-semibold">Damaged Stock</h1>
         <div className="flex gap-3 mb-2">

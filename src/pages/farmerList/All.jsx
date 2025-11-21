@@ -1,15 +1,85 @@
 import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
-import jsPDF from "jspdf";
 import TableLayout from "../layout/TableLayout";
 
 function All() {
   const [stocks, setStocks] = useState([]);
+  const [filteredStocks, setFilteredStocks] = useState([]);
 
+  const [showFilter, setShowFilter] = useState(false);
+
+  const [filterValues, setFilterValues] = useState({
+    district: "",
+    tehsil: "",
+    status: "",
+    sort: ""     // ⭐ NEW FIELD
+  });
+
+  // LOAD FARMERS
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem("farmers")) || [];
-    setStocks(data);
+
+    // add default status = Active
+    const updated = data.map((f) => ({
+      ...f,
+      status: f.status || "Active",
+    }));
+
+    setStocks(updated);
+    setFilteredStocks(updated);
+
+    localStorage.setItem("farmers", JSON.stringify(updated));
   }, []);
+
+  // unique district list
+  const districts = [...new Set(stocks.map((f) => f.district))];
+
+  // unique tehsil list
+  const tehsils = [...new Set(stocks.map((f) => f.tehsil))];
+
+  // FILTER APPLY FUNCTION
+  const applyFilter = () => {
+    let result = [...stocks];
+
+    if (filterValues.district)
+      result = result.filter((f) => f.district === filterValues.district);
+
+    if (filterValues.tehsil)
+      result = result.filter((f) => f.tehsil === filterValues.tehsil);
+
+    if (filterValues.status)
+      result = result.filter((f) => f.status === filterValues.status);
+
+    // ⭐ NAME SORTING LOGIC
+    if (filterValues.sort === "asc") {
+      result.sort((a, b) => a.name.localeCompare(b.name));
+    } else if (filterValues.sort === "desc") {
+      result.sort((a, b) => b.name.localeCompare(a.name));
+    }
+
+    setFilteredStocks(result);
+    setShowFilter(false);
+  };
+
+  // CLEAR FILTERS
+  const clearFilter = () => {
+    setFilterValues({ district: "", tehsil: "", status: "", sort: "" });
+    setFilteredStocks(stocks);
+    setShowFilter(false);
+  };
+
+  // TOGGLE STATUS ACTIVE <-> UNACTIVE
+  const toggleStatus = (farmerId) => {
+    const updated = stocks.map((f) =>
+      f.farmerId === farmerId
+        ? { ...f, status: f.status === "Active" ? "Unactive" : "Active" }
+        : f
+    );
+
+    setStocks(updated);
+    setFilteredStocks(updated);
+    localStorage.setItem("farmers", JSON.stringify(updated));
+  };
 
   const columns = [
     "Farmer ID",
@@ -22,49 +92,47 @@ function All() {
     "Action",
   ];
 
-  const [selectedRow, setSelectedRow] = useState(null);
-  const [openSmall, setOpenSmall] = useState(false);
-  const [popupPos, setPopupPos] = useState({ top: 0, left: 0 });
-
-  const openSmallPopup = (e, rowData) => {
-    const rect = e.target.getBoundingClientRect();
-    setSelectedRow(rowData);
-    setPopupPos({ top: rect.bottom + 6, left: rect.left - 150 });
-    setOpenSmall(true);
-  };
-
-  const [openBig, setOpenBig] = useState(false);
-  const [bigPopupTitle, setBigPopupTitle] = useState("");
-
-  const modifiedStocks = stocks.map((item) => ({
+  const modifiedStocks = filteredStocks.map((item) => ({
     "Farmer ID": item.farmerId || "—",
     "Farmer Name": item.name,
     Contact: item.contact,
     Village: item.village,
     Tehsil: item.tehsil,
     District: item.district,
-    Status: "Active",
+
+    Status: (
+      <button
+        className={`px-3 py-1 rounded-lg text-white ${
+          item.status === "Active" ? "bg-green-600" : "bg-red-600"
+        }`}
+        onClick={() => toggleStatus(item.farmerId)}
+      >
+        {item.status}
+      </button>
+    ),
 
     Action: (
       <div className="flex gap-3 justify-center">
         <button className="text-green-500">
           <i className="fa-solid fa-eye"></i>
         </button>
-
       </div>
     ),
   }));
 
   return (
     <>
-      <div className="ml-64 bg-gray-100 min-h-screen ">
+      <div className="ml-64  min-h-screen ">
         <div className="flex justify-between items-center p-4">
           <h1 className="mt-5 text-2xl font-semibold">All Farmers</h1>
 
           <div className="flex gap-3 mt-2">
-            <NavLink className="bg-[#CBD5E1] text-[#475569] mt-3 px-3 py-2 rounded-lg font-semibold">
+            <button
+              onClick={() => setShowFilter(true)}
+              className="bg-[#CBD5E1] text-[#475569] mt-3 px-3 py-2 rounded-lg font-semibold"
+            >
               <i className="fa-solid fa-filter mr-1"></i> Filter
-            </NavLink>
+            </button>
 
             <NavLink className="bg-[#CBD5E1] text-[#475569] mt-3 px-3 py-2 rounded-lg font-semibold">
               <i className="fa-solid fa-gear mr-1"></i> Settings
@@ -84,58 +152,91 @@ function All() {
         </div>
       </div>
 
-      {openSmall && (
-        <div onClick={() => setOpenSmall(false)} className="fixed inset-0 z-40">
-          <div
-            className="absolute bg-white shadow-md rounded-lg w-56 p-3 border flex flex-col gap-2"
-            style={{ top: popupPos.top, left: popupPos.left }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              className="border p-2 rounded hover:bg-gray-100 whitespace-nowrap"
-              onClick={() => {
-                setBigPopupTitle("Convert to Cancel");
-                setOpenBig(true);
-                setOpenSmall(false);
-              }}
-            >
-              <i className="fa-solid fa-xmark"></i> Convert to Cancel
-            </button>
-
-            <button
-              className="border p-2 rounded hover:bg-gray-100 whitespace-nowrap"
-              onClick={() => {
-                setBigPopupTitle("Convert to Return");
-                setOpenBig(true);
-                setOpenSmall(false);
-              }}
-            >
-              <i className="fa-solid fa-undo"></i> Convert to Return
-            </button>
-          </div>
-        </div>
-      )}
-
-      {openBig && (
+      {/* FILTER POPUP */}
+      {showFilter && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
-          <div className="bg-white p-6 w-[350px] rounded-2xl shadow-xl">
-            <p className="text-xl font-bold text-center">{bigPopupTitle}</p>
-            <p className="mt-4 text-lg font-semibold text-gray-800 ml-5">
-              Are you sure?
-            </p>
+          <div className="bg-white p-6 w-[400px] rounded-2xl shadow-xl">
 
-            <div className="flex justify-evenly mt-6">
+            <h2 className="text-xl font-semibold text-center mb-4">
+              Filter Farmers
+            </h2>
+
+            {/* District */}
+            <label className="font-semibold">District</label>
+            <select
+              className="w-full border p-2 rounded mb-3"
+              value={filterValues.district}
+              onChange={(e) =>
+                setFilterValues({ ...filterValues, district: e.target.value })
+              }
+            >
+              <option value="">Select District</option>
+              {districts.map((d) => (
+                <option key={d} value={d}>
+                  {d}
+                </option>
+              ))}
+            </select>
+
+            {/* Tehsil */}
+            <label className="font-semibold">Tehsil</label>
+            <select
+              className="w-full border p-2 rounded mb-3"
+              value={filterValues.tehsil}
+              onChange={(e) =>
+                setFilterValues({ ...filterValues, tehsil: e.target.value })
+              }
+            >
+              <option value="">Select Tehsil</option>
+              {tehsils.map((t) => (
+                <option key={t} value={t}>
+                  {t}
+                </option>
+              ))}
+            </select>
+
+            {/* Status */}
+            <label className="font-semibold">Status</label>
+            <select
+              className="w-full border p-2 rounded mb-3"
+              value={filterValues.status}
+              onChange={(e) =>
+                setFilterValues({ ...filterValues, status: e.target.value })
+              }
+            >
+              <option value="">Select Status</option>
+              <option value="Active">Active</option>
+              <option value="Unactive">Unactive</option>
+            </select>
+
+            {/* ⭐ NAME SORTING */}
+            <label className="font-semibold">Sort by Name</label>
+            <select
+              className="w-full border p-2 rounded mb-4"
+              value={filterValues.sort}
+              onChange={(e) =>
+                setFilterValues({ ...filterValues, sort: e.target.value })
+              }
+            >
+              <option value="">No Sorting</option>
+              <option value="asc">A → Z</option>
+              <option value="desc">Z → A</option>
+            </select>
+
+            {/* Buttons */}
+            <div className="flex justify-between mt-4">
               <button
-                onClick={() => setOpenBig(false)}
-                className="px-10 py-2 rounded-lg border border-gray-700 text-gray-800 hover:bg-gray-800 hover:text-white transition-all"
+                onClick={clearFilter}
+                className="px-14 py-2 bg-gray-400 text-white rounded-lg"
               >
-                Cancel
+                Clear
               </button>
 
               <button
-                className="px-10 py-2 rounded-lg bg-gray-900 text-white hover:bg-white hover:text-black hover:border-gray-900 border transition-all"
+                onClick={applyFilter}
+                className="px-14 py-2 bg-black text-white rounded-lg"
               >
-                Save
+                Apply
               </button>
             </div>
           </div>

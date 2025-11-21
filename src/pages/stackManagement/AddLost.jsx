@@ -16,6 +16,10 @@ function AddLost() {
 
   const [errors, setErrors] = useState({});
 
+   const product = ["Product 1", "Product 2", "Product 3", "Product 4", "Product 5"];
+
+  const skuOptions = ["5 liter","2 liter", "1 liter", "500 g", "250 g"];
+
   const godownOptions = [
     "Main Godown",
     "Secondary Godown",
@@ -75,9 +79,72 @@ function AddLost() {
           Add Lost Stock
         </h1>
 
+         {/* Product Dropdown */}
+        <div>
+          <p className="mb-2">Product</p>
+          <select
+            name="Product"
+            value={formData.Product}
+            onChange={handleChange}
+            className="w-full border rounded-lg p-2 bg-white"
+          >
+            <option value="">-- Select Product --</option>
+            {product.map((item, idx) => (
+              <option key={idx} value={item}>
+                {item}
+              </option>
+            ))}
+          </select>
+          {errors.Product && (
+            <p className="text-red-500 text-sm">{errors.Product}</p>
+          )}
+        </div>
+
+        {/* SKU Dropdown */}
+        <div className="mt-4">
+          <p className="mb-2">SKU</p>
+          <select
+            name="SKU"
+            value={formData.SKU}
+            onChange={handleChange}
+            className="w-full border rounded-lg p-2 bg-white"
+          >
+            <option value="">-- Select SKU --</option>
+            {skuOptions.map((sku, idx) => (
+              <option key={idx} value={sku}>
+                {sku}
+              </option>
+            ))}
+          </select>
+          {errors.SKU && (
+            <p className="text-red-500 text-sm">{errors.SKU}</p>
+          )}
+        </div>
+
+        {/* Select Godown Dropdown */}
+        <div className="mt-4">
+          <p className="mb-2">Select Godown</p>
+          <select
+            name="SelectGodown"
+            value={formData.SelectGodown}
+            onChange={handleChange}
+            className="w-full border rounded-lg p-2 bg-white"
+          >
+            <option value="">-- Select Godown --</option>
+            {godownOptions.map((godown, idx) => (
+              <option key={idx} value={godown}>
+                {godown}
+              </option>
+            ))}
+          </select>
+          {errors.SelectGodown && (
+            <p className="text-red-500 text-sm">{errors.SelectGodown}</p>
+          )}
+        </div>
+
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Product, SKU, ManufactureCost, NetQuantity, BatchNumber */}
-          {["Product", "SKU", "ManufactureCost", "NetQuantity", "BatchNumber"].map(
+          {["ManufactureCost", "NetQuantity", "BatchNumber"].map(
             (field) => (
               <div key={field}>
                 <p className="mb-2">
@@ -98,24 +165,19 @@ function AddLost() {
             )
           )}
 
-          {/* Select Godown Dropdown */}
+          {/* Expiry data */}
           <div>
-            <p className="mb-2">Select Godown</p>
-            <select
-              name="SelectGodown"
-              value={formData.SelectGodown}
-              onChange={handleChange}
-              className="w-full border rounded-lg p-2 bg-white"
-            >
-              <option value="">-- Select Godown --</option>
-              {godownOptions.map((godown, idx) => (
-                <option key={idx} value={godown}>
-                  {godown}
-                </option>
-              ))}
-            </select>
-            {errors.SelectGodown && (
-              <p className="text-red-500 text-sm">{errors.SelectGodown}</p>
+            <p className="mb-2">Expiry Date</p>
+            <input
+                  type="Date"
+                  name="ExpiryDate"
+                  placeholder="Expiry date is requierd"
+                  value={formData.ExpiryDate}
+                  onChange={handleChange}
+                  className="w-full border rounded-lg p-2"
+                />
+            {errors.ExpiryDate && (
+              <p className="text-red-500 text-sm">{errors.ExpiryDate}</p>
             )}
           </div>
 
