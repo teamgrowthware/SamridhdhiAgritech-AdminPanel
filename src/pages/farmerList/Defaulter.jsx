@@ -7,12 +7,16 @@ function Defaulter() {
   const [stocks, setStocks] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
 
-  useEffect(() => {
-    const data = JSON.parse(localStorage.getItem("farmers")) || [];
+ 
+    useEffect(() => {
+  const data = JSON.parse(localStorage.getItem("defaulter")) || [];
+  
+
     const modified = data.map((f) => ({
       ...f,
       status: f.status || "Active",
     }));
+  
     setStocks(modified);
     setFilteredData(modified);
   }, []);
@@ -89,7 +93,7 @@ function Defaulter() {
     setSortByName("");
     setFilteredData(stocks);
     setFilterPopup(false);
-    navigate(-1);
+    
   };
 
   const modifiedStocks = filteredData.map((item) => ({

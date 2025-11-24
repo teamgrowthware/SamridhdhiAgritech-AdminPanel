@@ -14,7 +14,7 @@ function Lost() {
     "Batch Number",
     "Expiry Date",
     "Action",
-    "Add Stock",
+    // "Add Stock",
   ];
 
   const [stocks, setStocks] = useState([]);
@@ -50,30 +50,30 @@ function Lost() {
     "Batch Number": item.BatchNumber,
     "Expiry Date":item.ExpiryDate,
     Action: (
-      <div className="flex gap-3 justify-center">
+      <div className="flex gap-2 justify-center">
         <button
-          className="text-blue-600 hover:text-blue-800"
+          className="text-black-600 hover:text-black-800"
           title="Download Stock"
         >
           <i className="fa-solid fa-download"></i>
         </button>
         <button
           onClick={() => editStock(item.id)}
-          className="text-yellow-500 hover:text-yellow-700"
+          className="text-black-500 hover:text-black-700"
           title="Edit Stock"
         >
         <i className="fa-solid fa-ellipsis-vertical text-xl cursor-pointer"></i>
         </button>
       </div>
     ),
-    "Add Stock": (
-      <button
-        onClick={handleAddStock}
-        className="bg-[#2DD521] text-[#ffffff] px-3 py-1 rounded-lg font-semibold hover:bg-[#5e1aa1] transition-all"
-      >
-        Add
-      </button>
-    ),
+    // "Add Stock": (
+    //   <button
+    //     onClick={handleAddStock}
+    //     className="bg-[#2DD521] text-[#ffffff] px-3 py-1 rounded-lg font-semibold hover:bg-[#5e1aa1] transition-all"
+    //   >
+    //     Add
+    //   </button>
+    // ),
   }));
 
   return (

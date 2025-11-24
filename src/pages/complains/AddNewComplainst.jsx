@@ -215,18 +215,18 @@ function AddNewComplaints() {
             <button
               type="button"
               onClick={handleCancel}
-              className="px-12 py-2 bg-gray-400 text-white rounded-lg"
+              className="px-14 py-2 bg-gray-400 text-white rounded-lg"
             >
               Cancel
             </button>
 
             <button
               type="submit"
-              className="px-12 py-2 bg-indigo-700 text-white rounded-lg"
+              className="px-14 py-2 bg-[#000000] text-white rounded-lg"
             >
               {location.state?.editItem
-                ? "Update Complaint"
-                : "Save Complaint"}
+                ? "Update"
+                : "Save"}
             </button>
           </div>
 

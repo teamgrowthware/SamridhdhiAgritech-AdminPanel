@@ -18,17 +18,31 @@ function AreaManager() {
   const [managers, setManagers] = useState([]);
   const navigate = useNavigate();
 
-  // Load from localStorage
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem("areamanager")) || [];
-    setManagers(stored);
-  }, []);
+      const stored = JSON.parse(localStorage.getItem("aream")) || [];
+      setManagers(stored);
+    }, []);
+  
+
+  // Load from localStorage
+  // useEffect(() => {
+  //   let stored = localStorage.getItem("aream");
+
+  //   try {
+  //     stored = JSON.parse(stored);
+  //     if (!Array.isArray(stored)) stored = []; // FIXED
+  //   } catch {
+  //     stored = [];
+  //   }
+
+  //   setManagers(stored);
+  // }, []);
 
   // Edit Manager
   const editManager = (id) => {
     const manager = managers.find((item) => item.id === id);
     if (manager) {
-      localStorage.setItem("areamanager", JSON.stringify(manager));
+      localStorage.setItem("editaream", JSON.stringify(manager));
       navigate("/employees/areamanager/addareamanager");
     }
   };
@@ -42,11 +56,7 @@ function AreaManager() {
     "Team Size": "-",
     Target: "-",
     Designation: item.designation,
-    Status: (
-      <span className=" ">
-        Active
-      </span>
-    ),
+    Status: <span className="">Active</span>,
     Action: (
       <div className="flex gap-3 justify-center">
         <button
@@ -62,7 +72,7 @@ function AreaManager() {
   return (
     <div className="ml-64 min-h-screen">
       <div className="flex justify-between items-center mb-1">
-        <h1 className="mt-10 text-2xl font-semibold">Area Managers </h1>
+        <h1 className="mt-10 text-2xl font-semibold">Area Managers</h1>
 
         <div className="flex gap-3">
           <NavLink className="bg-[#CBD5E1] text-[#475569] mt-10 mb-2 px-4 py-2 rounded-lg font-semibold">

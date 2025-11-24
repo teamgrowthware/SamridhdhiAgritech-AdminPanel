@@ -7,12 +7,19 @@ function Gold() {
   const [stocks, setStocks] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
 
-  useEffect(() => {
-    const data = JSON.parse(localStorage.getItem("farmers")) || [];
-    const modified = data.map((f) => ({
+useEffect(() => {
+    const allFarmers = JSON.parse(localStorage.getItem("farmers")) || [];
+    const removed = JSON.parse(localStorage.getItem("new1Removed")) || [];
+
+    const visibleFarmers = allFarmers.filter(
+      (f) => !removed.includes(f.farmerId)
+    );
+
+    const modified = visibleFarmers.map((f) => ({
       ...f,
       status: f.status || "Active",
     }));
+
     setStocks(modified);
     setFilteredData(modified);
   }, []);
@@ -41,6 +48,33 @@ function Gold() {
 
   const [openBig, setOpenBig] = useState(false);
   const [bigPopupTitle, setBigPopupTitle] = useState("");
+
+   const hideFromNewPage = (farmer) => {
+    const removed = JSON.parse(localStorage.getItem("new1Removed")) || [];
+    removed.push(farmer.farmerId);
+    localStorage.setItem("new1Removed", JSON.stringify(removed));
+
+    const newList = stocks.filter((f) => f.farmerId !== farmer.farmerId);
+    setStocks(newList);
+    setFilteredData(newList);
+  };
+
+  const moveToDefaulter = (farmer) => {
+    const savedDefaulter = JSON.parse(localStorage.getItem("defaulter")) || [];
+    savedDefaulter.push(farmer);
+    localStorage.setItem("defaulter", JSON.stringify(savedDefaulter));
+
+    hideFromNewPage(farmer);
+  };
+
+  // MOVE TO BLOCK
+  const moveToBlock = (farmer) => {
+    const savedBlock = JSON.parse(localStorage.getItem("block")) || [];
+    savedBlock.push(farmer);
+    localStorage.setItem("block", JSON.stringify(savedBlock));
+
+    hideFromNewPage(farmer);
+  };
 
   const [filterPopup, setFilterPopup] = useState(false);
 
@@ -89,8 +123,9 @@ function Gold() {
     setSortByName("");
     setFilteredData(stocks);
     setFilterPopup(false);
-    navigate(-1);
+    
   };
+
 
   const modifiedStocks = filteredData.map((item) => ({
     "Farmer ID": item.farmerId || "—",
@@ -190,7 +225,16 @@ function Gold() {
                 Cancel
               </button>
 
-              <button className="px-10 py-2 rounded-lg bg-gray-900 text-white hover:bg-white hover:text-black hover:border-gray-900 border transition-all">
+              <button
+              onClick={() => {
+                  if (bigPopupTitle === "Convert To Defaulter") {
+                    moveToDefaulter(selectedRow);
+                  } else if (bigPopupTitle === "Convert To Block") {
+                    moveToBlock(selectedRow);
+                  }
+                  setOpenBig(false);
+                }}
+               className="px-10 py-2 rounded-lg bg-gray-900 text-white hover:bg-white hover:text-black hover:border-gray-900 border transition-all">
                 Save
               </button>
             </div>

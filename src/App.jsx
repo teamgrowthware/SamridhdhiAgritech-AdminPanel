@@ -75,6 +75,9 @@ import ECenceledOrder from "./pages/orderManagement/ECenceledOrder";
 import ERejectedOrder from "./pages/orderManagement/ERejectedOrder";
 import Employee from "./pages/cart/Employee";
 import Farmer from "./pages/cart/Farmer";
+import SendStock from "./pages/stackManagement/SendStock";
+import Godown from "./pages/data/Godown";
+import AddGodown from "./pages/data/AddGodown";
 
 export default function App() {
   return (
@@ -96,6 +99,8 @@ export default function App() {
             <Route path="/stack/lost/addlost" element={<AddLost />} />
             <Route path="/stack/damaged" element={<Damaged />} />
             <Route path="/stack/damaged/adddamaged" element={<Adddamaged />} />
+            <Route path="/stack/send" element={<SendStock/>} />
+
 
             <Route path="/cart/employee" element={<Employee />} />
             <Route path="/cart/farmer" element={<Farmer />} />
@@ -191,6 +196,8 @@ export default function App() {
             />
             <Route path="/data/soil" element={<SoilList />} />
             <Route path="/data/soil/addsoil" element={<AddSoil />} />
+            <Route path="/data/Godown" element={<Godown/>}/>
+            <Route path="/data/godown/add" element={<AddGodown/>}/>
 
             <Route path="/complains/new" element={<NewComplaints />} />
             <Route

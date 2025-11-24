@@ -223,6 +223,7 @@ useEffect(() => {
               <Item to="/stack/finished">Finished</Item>
               <Item to="/stack/lost">Lost</Item>
               <Item to="/stack/damaged">Damaged</Item>
+              <Item to="/stack/send">Send</Item>
             </div>
           )}
         </div>
@@ -263,7 +264,7 @@ useEffect(() => {
               />
               {open.farmerOrders && (
                 <div className="pl-6 mt-1 space-y-1">
-                  <Item to="/orders/farmer" count={counts.farmer.main}>Farmer</Item>
+                  <Item to="/orders/farmer" count={counts.farmer.main}>Pending</Item>
                   <Item to="/orders/farmer/return" count={counts.farmer.return}>Return</Item>
                   <Item to="/orders/farmer/canceled" count={counts.farmer.canceled}>Canceled</Item>
                   <Item to="/orders/farmer/rejected" count={counts.farmer.rejected}>Rejected</Item>
@@ -280,7 +281,7 @@ useEffect(() => {
               />
               {open.employeeOrders && (
                 <div className="pl-6 mt-1 space-y-1">
-                  <Item to="/orders/byemployee" count={counts.employee.main}>By Employee</Item>
+                  <Item to="/orders/byemployee" count={counts.employee.main}>Pending</Item>
                   <Item to="/orders/byemployee/return" count={counts.employee.return}>Return</Item>
                   <Item to="/orders/byemployee/canceled" count={counts.employee.canceled}>Canceled</Item>
                   <Item to="/orders/byemployee/rejected" count={counts.employee.rejected}>Rejected</Item>
@@ -392,6 +393,7 @@ useEffect(() => {
               <Item to="/data/fungus">Fungus List</Item>
               <Item to="/data/herbicide">Herbicide</Item>
               <Item to="/data/soil">Soil List</Item>
+              <Item to="/data/Godown">Godown List</Item>
             </div>
           )}
         </div>

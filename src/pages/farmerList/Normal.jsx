@@ -8,11 +8,18 @@ function Normal() {
   const [filteredData, setFilteredData] = useState([]);
 
   useEffect(() => {
-    const data = JSON.parse(localStorage.getItem("farmers")) || [];
-    const modified = data.map((f) => ({
+    const allFarmers = JSON.parse(localStorage.getItem("farmers")) || [];
+    const removed = JSON.parse(localStorage.getItem("normalRemoved")) || [];
+
+    const visibleFarmers = allFarmers.filter(
+      (f) => !removed.includes(f.farmerId)
+    );
+
+    const modified = visibleFarmers.map((f) => ({
       ...f,
       status: f.status || "Active",
     }));
+
     setStocks(modified);
     setFilteredData(modified);
   }, []);
@@ -41,6 +48,35 @@ function Normal() {
 
   const [openBig, setOpenBig] = useState(false);
   const [bigPopupTitle, setBigPopupTitle] = useState("");
+
+  // HIDE FARMER ONLY FROM NORMAL PAGE
+  const hideFromNormal = (farmer) => {
+    const removed = JSON.parse(localStorage.getItem("normalRemoved")) || [];
+    removed.push(farmer.farmerId);
+    localStorage.setItem("normalRemoved", JSON.stringify(removed));
+
+    const newList = stocks.filter((f) => f.farmerId !== farmer.farmerId);
+    setStocks(newList);
+    setFilteredData(newList);
+  };
+
+  // MOVE TO DEFAULTER
+  const moveToDefaulter = (farmer) => {
+    const savedDefaulter = JSON.parse(localStorage.getItem("defaulter")) || [];
+    savedDefaulter.push(farmer);
+    localStorage.setItem("defaulter", JSON.stringify(savedDefaulter));
+
+    hideFromNormal(farmer);
+  };
+
+  // MOVE TO BLOCK
+  const moveToBlock = (farmer) => {
+    const savedBlock = JSON.parse(localStorage.getItem("block")) || [];
+    savedBlock.push(farmer);
+    localStorage.setItem("block", JSON.stringify(savedBlock));
+
+    hideFromNormal(farmer);
+  };
 
   const [filterPopup, setFilterPopup] = useState(false);
 
@@ -89,7 +125,7 @@ function Normal() {
     setSortByName("");
     setFilteredData(stocks);
     setFilterPopup(false);
-    navigate(-1);
+    
   };
 
   const modifiedStocks = filteredData.map((item) => ({
@@ -119,21 +155,17 @@ function Normal() {
 
   return (
     <>
-      <div className="ml-64  min-h-screen ">
+      <div className="ml-64 min-h-screen">
         <div className="flex justify-between items-center p-4">
           <h1 className="mt-5 text-2xl font-semibold">Normal Farmers</h1>
 
           <div className="flex gap-3 mt-2">
-            <NavLink
+            <button
               onClick={() => setFilterPopup(true)}
               className="bg-[#CBD5E1] text-[#475569] mt-3 px-3 py-2 rounded-lg font-semibold"
             >
               <i className="fa-solid fa-filter mr-1"></i> Filter
-            </NavLink>
-
-            <NavLink className="bg-[#CBD5E1] text-[#475569] mt-3 px-3 py-2 rounded-lg font-semibold">
-              <i className="fa-solid fa-gear mr-1"></i> Settings
-            </NavLink>
+            </button>
           </div>
         </div>
 
@@ -142,6 +174,7 @@ function Normal() {
         </div>
       </div>
 
+      {/* SMALL POPUP */}
       {openSmall && (
         <div onClick={() => setOpenSmall(false)} className="fixed inset-0 z-40">
           <div
@@ -157,7 +190,7 @@ function Normal() {
                 setOpenSmall(false);
               }}
             >
-              <i class="fa-solid fa-arrows-rotate mr-1"></i> Convert To Defaulter
+              <i className="fa-solid fa-arrows-rotate mr-1"></i> Convert To Defaulter
             </button>
 
             <button
@@ -168,12 +201,13 @@ function Normal() {
                 setOpenSmall(false);
               }}
             >
-              <i class="fa-solid fa-arrows-rotate mr-1"></i> Convert To Block
+              <i className="fa-solid fa-arrows-rotate mr-1"></i> Convert To Block
             </button>
           </div>
         </div>
       )}
 
+      {/* BIG POPUP */}
       {openBig && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
           <div className="bg-white p-6 w-[350px] rounded-2xl shadow-xl">
@@ -185,12 +219,22 @@ function Normal() {
             <div className="flex justify-evenly mt-6">
               <button
                 onClick={() => setOpenBig(false)}
-                className="px-10 py-2 rounded-lg border border-gray-700 text-gray-800 hover:bg-gray-800 hover:text-white transition-all"
+                className="px-10 py-2 rounded-lg border border-gray-700 text-gray-800 hover:bg-gray-800 hover:text-white"
               >
                 Cancel
               </button>
 
-              <button className="px-10 py-2 rounded-lg bg-gray-900 text-white hover:bg-white hover:text-black hover:border-gray-900 border transition-all">
+              <button
+                onClick={() => {
+                  if (bigPopupTitle === "Convert To Defaulter") {
+                    moveToDefaulter(selectedRow);
+                  } else if (bigPopupTitle === "Convert To Block") {
+                    moveToBlock(selectedRow);
+                  }
+                  setOpenBig(false);
+                }}
+                className="px-10 py-2 rounded-lg bg-gray-900 text-white hover:bg-white hover:text-black hover:border-gray-900 border"
+              >
                 Save
               </button>
             </div>
@@ -204,7 +248,6 @@ function Normal() {
           <div className="bg-white w-[350px] rounded-xl p-5 shadow-xl">
             <h2 className="text-xl font-bold mb-4 text-center">Filters</h2>
 
-            {/* DISTRICT */}
             <label className="font-semibold">District</label>
             <select
               className="border w-full p-2 rounded mt-1"
@@ -219,7 +262,6 @@ function Normal() {
               ))}
             </select>
 
-            {/* TEHSIL */}
             <label className="font-semibold mt-3 block">Tehsil</label>
             <select
               className="border w-full p-2 rounded mt-1"
@@ -234,7 +276,6 @@ function Normal() {
               ))}
             </select>
 
-            {/* STATUS */}
             <label className="font-semibold mt-3 block">Status</label>
             <select
               className="border w-full p-2 rounded mt-1"
@@ -246,7 +287,6 @@ function Normal() {
               <option value="Unactive">Unactive</option>
             </select>
 
-            {/* NAME SORT */}
             <label className="font-semibold mt-3 block">Sort by Name</label>
             <select
               className="border w-full p-2 rounded mt-1"
@@ -259,17 +299,11 @@ function Normal() {
             </select>
 
             <div className="flex justify-between mt-5">
-              <button
-                className="px-14 py-2 bg-gray-300 rounded-lg"
-                onClick={clearFilters}
-              >
+              <button className="px-14 py-2 bg-gray-300 rounded-lg" onClick={clearFilters}>
                 Clear
               </button>
 
-              <button
-                className="px-14 py-2 bg-gray-900 text-white rounded-lg"
-                onClick={applyFilters}
-              >
+              <button className="px-14 py-2 bg-gray-900 text-white rounded-lg" onClick={applyFilters}>
                 Apply
               </button>
             </div>

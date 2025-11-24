@@ -8,7 +8,9 @@ function Block() {
   const [filteredData, setFilteredData] = useState([]);
 
   useEffect(() => {
-    const data = JSON.parse(localStorage.getItem("farmers")) || [];
+   
+  const data = JSON.parse(localStorage.getItem("block")) || [];
+
     const modified = data.map((f) => ({
       ...f,
       status: f.status || "Active",
@@ -89,7 +91,6 @@ function Block() {
     setSortByName("");
     setFilteredData(stocks);
     setFilterPopup(false);
-    navigate(-1);
   };
 
   const modifiedStocks = filteredData.map((item) => ({

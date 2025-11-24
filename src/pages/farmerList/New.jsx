@@ -1,7 +1,8 @@
+
+
 import React, { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import TableLayout from "../layout/TableLayout";
-
 
 function New() {
   const navigate = useNavigate();
@@ -9,11 +10,18 @@ function New() {
   const [filteredData, setFilteredData] = useState([]);
 
   useEffect(() => {
-    const data = JSON.parse(localStorage.getItem("farmers")) || [];
-    const modified = data.map((f) => ({
+    const allFarmers = JSON.parse(localStorage.getItem("farmers")) || [];
+    const removed = JSON.parse(localStorage.getItem("newRemoved")) || [];
+
+    const visibleFarmers = allFarmers.filter(
+      (f) => !removed.includes(f.farmerId)
+    );
+
+    const modified = visibleFarmers.map((f) => ({
       ...f,
       status: f.status || "Active",
     }));
+
     setStocks(modified);
     setFilteredData(modified);
   }, []);
@@ -43,52 +51,85 @@ function New() {
   const [openBig, setOpenBig] = useState(false);
   const [bigPopupTitle, setBigPopupTitle] = useState("");
 
+  // HIDE FARMER ONLY FROM NEW PAGE
+  const hideFromNewPage = (farmer) => {
+    const removed = JSON.parse(localStorage.getItem("newRemoved")) || [];
+    removed.push(farmer.farmerId);
+    localStorage.setItem("newRemoved", JSON.stringify(removed));
+
+    const newList = stocks.filter((f) => f.farmerId !== farmer.farmerId);
+    setStocks(newList);
+    setFilteredData(newList);
+  };
+
+  // MOVE TO DEFAULTER
+  const moveToDefaulter = (farmer) => {
+    const savedDefaulter = JSON.parse(localStorage.getItem("defaulter")) || [];
+    savedDefaulter.push(farmer);
+    localStorage.setItem("defaulter", JSON.stringify(savedDefaulter));
+
+    hideFromNewPage(farmer);
+  };
+
+  // MOVE TO BLOCK
+  const moveToBlock = (farmer) => {
+    const savedBlock = JSON.parse(localStorage.getItem("block")) || [];
+    savedBlock.push(farmer);
+    localStorage.setItem("block", JSON.stringify(savedBlock));
+
+    hideFromNewPage(farmer);
+  };
+
   const [filterPopup, setFilterPopup] = useState(false);
-
-  // FILTER STATES
-  const [districtFilter, setDistrictFilter] = useState("");
-  const [tehsilFilter, setTehsilFilter] = useState("");
-  const [statusFilter, setStatusFilter] = useState("");
-  const [sortByName, setSortByName] = useState("");
-
-  // UNIQUE DISTRICTS + TEHSILS
-  const districtList = [...new Set(stocks.map((f) => f.district))];
-  const tehsilList = [...new Set(stocks.map((f) => f.tehsil))];
-
-  // APPLY FILTERS
-  const applyFilters = () => {
-    let data = [...stocks];
-
-    if (districtFilter) {
-      data = data.filter((f) => f.district === districtFilter);
-    }
-
-    if (tehsilFilter) {
-      data = data.filter((f) => f.tehsil === tehsilFilter);
-    }
-
-    if (statusFilter) {
-      data = data.filter((f) => f.status === statusFilter);
-    }
-
-    // SORT NAME
-    if (sortByName === "asc") {
-      data.sort((a, b) => a.name.localeCompare(b.name));
-    } else if (sortByName === "desc") {
-      data.sort((a, b) => b.name.localeCompare(a.name));
-    }
-
-    setFilteredData(data);
-    setFilterPopup(false);
-  };
-
-  const clearFilters = () => {
-    setDistrictFilter("");
-    setTehsilFilter("");
-    setStatusFilter("");
-    setSortByName("");
-    setFilteredData(stocks);
-  };
+  
+    // FILTER STATES
+    const [districtFilter, setDistrictFilter] = useState("");
+    const [tehsilFilter, setTehsilFilter] = useState("");
+    const [statusFilter, setStatusFilter] = useState("");
+    const [sortByName, setSortByName] = useState("");
+  
+    // UNIQUE DISTRICTS + TEHSILS
+    const districtList = [...new Set(stocks.map((f) => f.district))];
+    const tehsilList = [...new Set(stocks.map((f) => f.tehsil))];
+  
+    // APPLY FILTERS
+    const applyFilters = () => {
+      let data = [...stocks];
+  
+      if (districtFilter) {
+        data = data.filter((f) => f.district === districtFilter);
+      }
+  
+      if (tehsilFilter) {
+        data = data.filter((f) => f.tehsil === tehsilFilter);
+      }
+  
+      if (statusFilter) {
+        data = data.filter((f) => f.status === statusFilter);
+      }
+  
+      // SORT NAME
+      if (sortByName === "asc") {
+        data.sort((a, b) => a.name.localeCompare(b.name));
+      } else if (sortByName === "desc") {
+        data.sort((a, b) => b.name.localeCompare(a.name));
+      }
+  
+      setFilteredData(data);
+      setFilterPopup(false);
+    };
+  
+    // CLEAR FILTERS
+    const clearFilters = () => {
+      setDistrictFilter("");
+      setTehsilFilter("");
+      setStatusFilter("");
+      setSortByName("");
+      setFilteredData(stocks);
+      setFilterPopup(false);
+     
+    };
+  
 
   const modifiedStocks = filteredData.map((item) => ({
     "Farmer ID": item.farmerId || "—",
@@ -128,10 +169,6 @@ function New() {
             >
               <i className="fa-solid fa-filter mr-1"></i> Filter
             </button>
-
-            <NavLink className="bg-[#CBD5E1] text-[#475569] mt-3 px-3 py-2 rounded-lg font-semibold">
-              <i className="fa-solid fa-gear mr-1"></i> Settings
-            </NavLink>
           </div>
         </div>
 
@@ -146,17 +183,16 @@ function New() {
           <div
             className="absolute bg-white shadow-md rounded-lg w-56 p-3 border flex flex-col gap-2"
             style={{ top: popupPos.top, left: popupPos.left }}
-            onClick={(e) => e.stopPropagation()}
-          >
+            onClick={(e) => e.stopPropagation()}>
+            
             <button
               className="border p-2 rounded hover:bg-gray-100 whitespace-nowrap"
               onClick={() => {
                 setBigPopupTitle("Convert To Defaulter");
                 setOpenBig(true);
                 setOpenSmall(false);
-              }}
-            >
-              <i class="fa-solid fa-arrows-rotate mr-1"></i> Convert To Defaulter
+              }}>
+              <i className="fa-solid fa-arrows-rotate mr-1"></i> Convert To Defaulter
             </button>
 
             <button
@@ -165,9 +201,8 @@ function New() {
                 setBigPopupTitle("Convert To Block");
                 setOpenBig(true);
                 setOpenSmall(false);
-              }}
-            >
-              <i class="fa-solid fa-arrows-rotate mr-1"></i> Convert To Block
+              }}>
+              <i className="fa-solid fa-arrows-rotate mr-1"></i> Convert To Block
             </button>
           </div>
         </div>
@@ -178,19 +213,25 @@ function New() {
         <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
           <div className="bg-white p-6 w-[350px] rounded-2xl shadow-xl">
             <p className="text-xl font-bold text-center">{bigPopupTitle}</p>
-            <p className="mt-4 text-lg font-semibold text-gray-800 ml-5">
-              Are you sure?
-            </p>
+            <p className="mt-4 text-lg font-semibold text-gray-800 ml-5">Are you sure?</p>
 
             <div className="flex justify-evenly mt-6">
               <button
                 onClick={() => setOpenBig(false)}
-                className="px-10 py-2 rounded-lg border border-gray-700 text-gray-800 hover:bg-gray-800 hover:text-white transition-all"
-              >
+                className="px-10 py-2 rounded-lg border border-gray-700 text-gray-800 hover:bg-gray-800 hover:text-white">
                 Cancel
               </button>
 
-              <button className="px-10 py-2 rounded-lg bg-gray-900 text-white hover:bg-white hover:text-black hover:border-gray-900 border transition-all">
+              <button
+                onClick={() => {
+                  if (bigPopupTitle === "Convert To Defaulter") {
+                    moveToDefaulter(selectedRow);
+                  } else if (bigPopupTitle === "Convert To Block") {
+                    moveToBlock(selectedRow);
+                  }
+                  setOpenBig(false);
+                }}
+                className="px-10 py-2 rounded-lg bg-gray-900 text-white hover:bg-white hover:text-black hover:border-gray-900 border">
                 Save
               </button>
             </div>
@@ -198,7 +239,7 @@ function New() {
         </div>
       )}
 
-      {/* FILTER POPUP */}
+       {/* FILTER POPUP */}
       {filterPopup && (
         <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center z-50">
           <div className="bg-white w-[350px] rounded-xl p-5 shadow-xl">
@@ -281,3 +322,5 @@ function New() {
 }
 
 export default New;
+
+

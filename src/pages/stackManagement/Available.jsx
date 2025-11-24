@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -20,10 +21,8 @@ function Available() {
   const [stocks, setStocks] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [groupData, setGroupData] = useState([]);
-
-  const [editIndex, setEditIndex] = useState(null); // <<< ADDED
-  const [editRowData, setEditRowData] = useState({}); // <<< ADDED
-
+  const [editIndex, setEditIndex] = useState(null);
+  const [editRowData, setEditRowData] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -31,7 +30,20 @@ function Available() {
     setStocks(storedStocks);
   }, []);
 
-  const editStock = (id) => {
+  // ---------------- SEND BUTTON FUNCTION ----------------
+  const handleSendStock = (item) => {
+    const storedSend = JSON.parse(localStorage.getItem("sendstock")) || [];
+
+    storedSend.push(item); // Add selected item
+
+    localStorage.setItem("sendstock", JSON.stringify(storedSend));
+
+    toast.success("Stock sent successfully");
+    navigate("/stack/send");
+  };
+  // ------------------------------------------------------
+
+   const editStock = (id) => {
     const stockToEdit = stocks.find((item) => item.id === id);
     if (stockToEdit) {
       localStorage.setItem("editnewstock", JSON.stringify(stockToEdit));
@@ -50,12 +62,10 @@ function Available() {
         x.SKU === item.SKU &&
         x.SelectGodown === item.SelectGodown
     );
-
     setGroupData(matched);
     setShowModal(true);
   };
 
-  // <<< ADDED — Start Editing inside the modal
   const startRowEdit = (row, index) => {
     setEditIndex(index);
     setEditRowData({ ...row });
@@ -68,21 +78,17 @@ function Available() {
   const saveRowEdit = () => {
     let updated = [...groupData];
     updated[editIndex] = { ...editRowData };
-
     setGroupData(updated);
     setEditIndex(null);
 
-    // Update main stock
     const newMain = stocks.map((item) =>
       item.id === editRowData.id ? editRowData : item
     );
 
     setStocks(newMain);
     localStorage.setItem("newstock", JSON.stringify(newMain));
-
     toast.success("Stock updated successfully");
   };
-  // <<< ADDED END
 
   const modifiedStocks = stocks.map((item, index) => ({
     "S.no": index + 1,
@@ -95,17 +101,16 @@ function Available() {
     "Expiry Date": item.ExpiryDate,
 
     Action: (
-      <div className="flex gap-3 justify-center">
+      <div className="flex gap-2 justify-center">
         <button
-          className="text-blue-600 hover:text-blue-800"
+          className="text-black-600 hover:text-black-800"
           title="Download Stock"
         >
           <i className="fa-solid fa-download"></i>
         </button>
-
         <button
           onClick={() => handleViewMore(item)}
-          className="text-yellow-500 hover:text-yellow-700"
+          className="text-black-500 hover:text-black-700"
           title="View & Edit"
         >
           <i className="fa-solid fa-ellipsis-vertical text-xl cursor-pointer"></i>
@@ -114,12 +119,22 @@ function Available() {
     ),
 
     "Add Stock": (
-      <button
-        onClick={handleAddStock}
-        className="bg-[#2DD521] text-[#ffffff] px-3 py-1 rounded-lg font-semibold hover:bg-[#5e1aa1] transition-all"
-      >
-        Add
-      </button>
+      <div className="flex flex-row gap-3">
+        <button
+          onClick={handleAddStock}
+          className="bg-[#2DD521] text-[#ffffff] px-3 py-1 rounded-lg font-semibold"
+        >
+          Add
+        </button>
+
+        {/*SEND BUTTON (New) */}
+        <button
+          onClick={() => handleSendStock(item)}
+          className="bg-blue-600 text-white px-3 py-1 rounded-lg font-semibold"
+        >
+          Send
+        </button>
+      </div>
     ),
   }));
 
@@ -127,38 +142,36 @@ function Available() {
     <div className="ml-64 min-h-screen">
       <div className="flex justify-between items-center ">
         <h1 className="mt-5 text-2xl font-semibold">Available Stock</h1>
-
         <div className="flex gap-3 mb-2">
-          <NavLink className="bg-[#CBD5E1] text-[#475569] hover:text-white mt-10 mb-2 px-4 py-2 rounded-lg font-semibold  hover:bg-[#5e1aa1] transition-all">
+          <NavLink className="bg-[#CBD5E1] text-[#475569] hover:text-white mt-10 mb-2 px-4 py-2 rounded-lg font-semibold hover:bg-[#5e1aa1] transition-all">
             <i className="fa-solid fa-filter mr-1"></i> Filter
           </NavLink>
 
           <NavLink
             to="/stack/available/addstock"
-            className="bg-[#000000] text-white mt-10 mb-2 px-4 py-2 rounded-lg font-semibold hover:bg-[#5e1aa1] transition-all"
+            className="bg-black text-white mt-10 mb-2 px-4 py-2 rounded-lg font-semibold hover:bg-[#5e1aa1] transition-all"
           >
             + Add New Stock
           </NavLink>
         </div>
       </div>
 
-      <div className="bg-white rounded-xl shadow-md overflow-x-auto">
+      <div className="bg-white rounded-xl shadow-md overflow-x-auto ">
         {modifiedStocks.length > 0 ? (
           <TableLayout columns={columns} data={modifiedStocks} />
         ) : (
           <p className="text-center text-gray-500 py-6">
-            No stock added yet. Click “+ Add Stock” to create one.
+            No stock added yet. Click “+ Add Stock”.
           </p>
         )}
       </div>
 
-      {/* ------------------- VIEW MORE MODAL ------------------- */}
-     {showModal && (
+       {showModal && (
   <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-start justify-center overflow-y-auto p-2">
-    <div className="bg-white p-6 rounded-xl w-full max-w-5xl shadow-lg mt-10 mb-10">
+    <div className="bg-[#E2E2E2] p-6 rounded-xl w-full max-w-5xl shadow-lg mt-10 mb-10">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">
-          History (Product: {groupData[0]?.Product})
+          History 
         </h2>
         <button onClick={() => setShowModal(false)}>
           <i className="fa-solid fa-xmark text-xl"></i>
@@ -167,13 +180,14 @@ function Available() {
 
       <table className="w-full">
         <thead>
-          <tr className="bg-gray-200 text-center">
+          <tr className="bg-[#393636] text-[#FFFFFF] text-center">
             <th className="p-1 ">S.no</th>
             <th className="p-1 ">Expiry</th>
             <th className="p-1 ">Godown</th>
             <th className="p-1 ">Product Name</th>
             <th className="p-1 ">SKU</th>
             <th className="p-1 ">Batch Number</th>
+            <th className="p-1">Manufactury Cost</th>
             <th className="p-1 ">Available Qty</th>
             <th className="p-1 ">Edit</th>
           </tr>
@@ -191,7 +205,7 @@ function Available() {
                     name="ExpiryDate"
                     value={editRowData.ExpiryDate}
                     onChange={handleEditChange}
-                  className="w-28"
+                  className="w-28 text-center"
                   />
                 ) : (
                   data.ExpiryDate
@@ -204,7 +218,7 @@ function Available() {
                     name="SelectGodown"
                     value={editRowData.SelectGodown}
                     onChange={handleEditChange}
-                    className="w-28"
+                    className="w-28 text-center"
                   />
                 ) : (
                   data.SelectGodown
@@ -220,7 +234,7 @@ function Available() {
                     name="BatchNumber"
                     value={editRowData.BatchNumber}
                     onChange={handleEditChange}
-                    className="w-28"
+                    className="w-28 text-center"
                   />
                 ) : (
                   data.BatchNumber
@@ -230,10 +244,23 @@ function Available() {
               <td className=" h-10 align-middle">
                 {editIndex === i ? (
                   <input
+                    name="ManufactureCost"
+                    value={editRowData.ManufactureCost}
+                    onChange={handleEditChange}
+                   className="w-28 text-center"
+                  />
+                ) : (
+                  data.ManufactureCost
+                )}
+              </td>
+
+              <td className=" h-10 align-middle">
+                {editIndex === i ? (
+                  <input
                     name="NetQuantity"
                     value={editRowData.NetQuantity}
                     onChange={handleEditChange}
-                   className="w-28"
+                   className="w-28 text-center "
                   />
                 ) : (
                   data.NetQuantity
@@ -265,9 +292,9 @@ function Available() {
     </div>
   </div>
 )}
-
     </div>
   );
 }
 
 export default Available;
+
