@@ -9,7 +9,7 @@ const Topbar = ({ searchText, setSearchText }) => {
         <div className="flex items-center space-x-4">
           <Menu size={22} className="text-gray-700 cursor-pointer" />
           <h1 className="text-lg font-bold text-green-800 tracking-wide">
-            SAMRIDDHI AGROTECH
+            Demonstration
           </h1>
         </div>
 
