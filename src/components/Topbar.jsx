@@ -18,7 +18,7 @@ const Topbar = ({ searchText, setSearchText, menuOpen, setMenuOpen }) => {
           </button>
 
           <h1 className="text-lg font-bold text-green-800 tracking-wide">
-            SAMRIDDHI AGROTECH
+            Demonstration
           </h1>
         </div>
 
