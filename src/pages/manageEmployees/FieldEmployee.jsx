@@ -56,6 +56,13 @@ function FieldEmployee() {
         >
           <i className="fas fa-edit text-lg"></i>
         </button>
+        <button
+          onClick={()=>{ localStorage.setItem("editfieldm", JSON.stringify(item));
+            navigate("/employees/field/deshboard")}}
+          className="w-6 h-6 border border-blue-400 rounded-full flex items-center justify-center cursor-pointer"
+        >
+          <i className="fa-solid fa-ellipsis text-blue-400"></i>
+        </button>
       </div>
     ),
   }));

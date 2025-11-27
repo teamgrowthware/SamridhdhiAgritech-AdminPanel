@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
@@ -6,7 +5,9 @@ import Topbar from "./Topbar";
 
 export default function Layout() {
   const [searchText, setSearchText] = useState("");
+  
   const [menuItems, setMenuItems] = useState([]);
+  const [menuOpen, setMenuOpen] = useState(false); // 👈 Sidebar toggle state
 
   const filteredItems = searchText.trim()
     ? menuItems.filter((item) =>
@@ -16,25 +17,31 @@ export default function Layout() {
 
   return (
     <div className="flex min-h-screen">
-      <Sidebar setMenuItems={setMenuItems} />
+
+      {/* 👇 Sidebar with toggle */}
+     <Sidebar menuOpen={menuOpen} setMenuItems={setMenuItems} />
 
       <div className="flex-1 flex flex-col">
-        <div className="p-4 border-b bg-white">
-          <Topbar searchText={searchText} setSearchText={setSearchText} />
-        </div>
 
-        <main className="p-6 bg-gray-50 flex-1 overflow-auto">
+        {/* 👇 Topbar me toggle button bhej rahe */}
+        <div className="p-4 border-b bg-white">
+          <Topbar
+            searchText={searchText}
+            setSearchText={setSearchText}
+            menuOpen={menuOpen}
+            setMenuOpen={setMenuOpen}
+          />
+        </div>
+        <div className="w-full md:w-[90%] lg:w-[100%] 2xl:w-[70%] mx-auto">
+        <main className="p-6 bg-gray-50 flex-1 overflow-auto ">
           {searchText && (
-            <div className=" p-4 rounded shadow mb-4">
+            <div className="p-4 rounded shadow mb-4">
               <h2 className="text-xl font-bold mb-2">Search Results</h2>
 
               {filteredItems.length > 0 ? (
                 <ul className="space-y-2">
                   {filteredItems.map((item, index) => (
-                    <li
-                      key={index}
-                      className="p-2 bg-gray-100 rounded hover:bg-gray-200"
-                    >
+                    <li key={index} className="p-2 bg-gray-100 rounded">
                       <a href={item.to} className="text-blue-600">
                         {item.label}
                       </a>
@@ -49,8 +56,8 @@ export default function Layout() {
 
           {!searchText && <Outlet />}
         </main>
+        </div>
       </div>
     </div>
   );
 }
-

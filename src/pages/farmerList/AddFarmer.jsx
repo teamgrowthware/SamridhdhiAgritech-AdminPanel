@@ -108,7 +108,7 @@ const AddFarmer = () => {
   ];
 
   return (
-    <div className="ml-64 bg-gray-100 min-h-screen mt-10">
+    <div className="lg:ml-64 bg-gray-100 min-h-screen mt-10">
       <h2 className="text-2xl font-bold mb-4">Add Farmer</h2>
 
       <form onSubmit={handleSubmit}>

@@ -15,22 +15,19 @@ import {
   ListChecks,
 } from "lucide-react";
 
-export default function Sidebar({ setMenuItems }) {
+export default function Sidebar({ setMenuItems, menuOpen }) {
   const location = useLocation();
 
-  // ============================
-  // 🔥 DUMMY COUNTS (Replace with API later)
-  // ============================
   const [counts, setCounts] = useState({
     farmer: { main: 6, return: 2, canceled: 1, rejected: 1, completed: 2 },
     employee: { main: 5, return: 1, canceled: 1, rejected: 1, completed: 2 },
     payment: { pending: 3, upcoming: 2 },
     complains: { new: 4, technical: 1, pending: 2, completed: 0 },
-    workmanagement:{ demo:2, visit:3},
+    workmanagement: { demo: 2, visit: 3 },
   });
 
-useEffect(() => {
-   const items = [
+  useEffect(() => {
+    const items = [
       { label: "Dashboard", to: "/" },
       { label: "Available Stock", to: "/stack/available" },
       { label: "Finished Stock", to: "/stack/finished" },
@@ -63,18 +60,13 @@ useEffect(() => {
       { label: "Pending Complaint", to: "/complains/pending" },
       { label: "Completed Complaint", to: "/complains/completed" },
     ];
-    setMenuItems(items);
-   }, []);
+    // setMenuItems(items);
+  }, []);
 
-  // ============================
-  // 🔥 HIDE COUNT AFTER VISITING PAGE
-  // ============================
   useEffect(() => {
     const path = location.pathname;
-
     const update = { ...counts };
 
-    // AUTO-CLEAR COUNTS ONLY FOR THAT PAGE
     if (path.includes("/orders/farmer")) {
       update.farmer.main = 0;
       if (path.includes("/return")) update.farmer.return = 0;
@@ -91,8 +83,8 @@ useEffect(() => {
       if (path.includes("/completed")) update.employee.completed = 0;
     }
 
-    if(path.includes("/workmanagement/demo"))update.workmanagement.demo=0;
-    if(path.includes("/workmanagement/visit"))update.workmanagement.visit=0;
+    if (path.includes("/workmanagement/demo")) update.workmanagement.demo = 0;
+    if (path.includes("/workmanagement/visit")) update.workmanagement.visit = 0;
 
     if (path.includes("/payment/pending")) update.payment.pending = 0;
     if (path.includes("/payment/upcoming")) update.payment.upcoming = 0;
@@ -105,9 +97,6 @@ useEffect(() => {
     setCounts(update);
   }, [location.pathname]);
 
-  // ============================
-  // MENU STATE
-  // ============================
   const [open, setOpen] = useState({
     stack: false,
     orders: false,
@@ -118,10 +107,10 @@ useEffect(() => {
     products: false,
     data: false,
     complains: false,
-    workmanagement:false,
+    workmanagement: false,
     reports: false,
     settings: false,
-    cart:false,
+    cart: false,
     farmerOrders: false,
     employeeOrders: false,
   });
@@ -144,25 +133,9 @@ useEffect(() => {
     });
   };
 
-  // ============================
-  // UI COMPONENTS
-  // ============================
-//   <div
-//   className="
-//     flex items-center justify-center
-//     bg-red-500 text-white
-//     rounded-full
-//     w-5 h-5 text-[10px]     /* mobile */
-//     sm:w-6 sm:h-6 sm:text-xs /* small screens */
-//     md:w-7 md:h-7 md:text-sm /* tablet */
-//   "
-// >
-//   {count}
-// </div>
-
   const CountBadge = ({ count }) =>
     count > 0 ? (
-      <span className="ml-2 bg-red-500 text-white text-xs px-2 py-[1px] rounded-full sm:w-6 sm:h-6 sm:text-xs md:w-7 md:h-7 md:text-sm ">
+      <span className="ml-2 bg-red-500 text-white text-xs px-2 py-[2px] rounded-full">
         {count}
       </span>
     ) : null;
@@ -171,9 +144,7 @@ useEffect(() => {
     <Link
       to={to}
       className={`flex justify-between px-3 py-2 rounded transition-all duration-200 ${
-        location.pathname === to
-          ? "font-bold text-black"
-          : "hover:bg-gray-100 rounded"
+        location.pathname === to ? "font-bold text-black" : "hover:bg-gray-100"
       }`}
     >
       <span>{children}</span>
@@ -192,7 +163,7 @@ useEffect(() => {
         }
       `}
     >
-      <span className="flex items-center">
+      <span className="flex items-center gap-2">
         {icon}
         {label}
         <CountBadge count={count} />
@@ -202,21 +173,25 @@ useEffect(() => {
   );
 
   return (
-    <aside className="fixed left-0 top-[64px] w-64 h-[calc(100%-64px)] bg-white border-r border-gray-200 overflow-y-auto scrollbar-hide pt-4">
-      <nav className="px-2 py-3">
-{/* ====================== DASHBOARD  ===================== */}
+    <aside
+  className={`
+    fixed top-[64px] w-64 h-[calc(100%-64px)]
+    bg-white border-r border-gray-200 overflow-y-auto scrollbar-hide pt-4
+    transition-transform duration-300 z-40
+    ${menuOpen ? "translate-x-0" : "-translate-x-64"} 
+    md:translate-x-0 md:left-0
+  `}
+>
 
-        <Item to="/" count={0}>
+      <nav className="px-2 py-3">
+
+        <Item to="/">
           <LayoutDashboard size={16} className="inline-block mr-2" /> Dashboard
         </Item>
 
-       {/* ====================== STOCK  ===================== */}
+        {/* STOCK */}
         <div className="mt-2">
-          <MainButton
-            section="stack"
-            icon={<Package size={16} className="inline-block mr-2" />}
-            label="Stock Management"
-          />
+          <MainButton section="stack" icon={<Package size={16} />} label="Stock Management" />
           {open.stack && (
             <div className="pl-6 mt-1 space-y-1">
               <Item to="/stack/available">Available</Item>
@@ -227,27 +202,23 @@ useEffect(() => {
             </div>
           )}
         </div>
-        {/* ====================== CART  ===================== */}
+
+        {/* CART */}
         <div className="mt-2">
-          <MainButton
-            section="cart"
-            icon={<ShoppingCart size={16} className="inline-block mr-2" />}
-            label="Cart Management"
-          />
+          <MainButton section="cart" icon={<ShoppingCart size={16} />} label="Cart Management" />
           {open.cart && (
             <div className="pl-6 mt-1 space-y-1">
               <Item to="/cart/employee">Employee</Item>
               <Item to="/cart/farmer">Farmer</Item>
-
             </div>
           )}
         </div>
 
-        {/* ====================== ORDER MANAGEMENT ===================== */}
+        {/* ORDERS */}
         <div className="mt-2">
           <MainButton
             section="orders"
-            icon={<ShoppingCart size={16} className="inline-block mr-2" />}
+            icon={<ShoppingCart size={16} />}
             label="OrderManagement"
             count={counts.farmer.main + counts.employee.main}
           />
@@ -255,13 +226,13 @@ useEffect(() => {
           {open.orders && (
             <div className="pl-6 mt-1 space-y-1">
 
-              {/* FARMER ORDER */}
               <MainButton
                 section="farmerOrders"
-                icon={<Users size={16} className="inline-block mr-2" />}
+                icon={<Users size={16} />}
                 label="Farmer"
                 count={counts.farmer.main}
               />
+
               {open.farmerOrders && (
                 <div className="pl-6 mt-1 space-y-1">
                   <Item to="/orders/farmer" count={counts.farmer.main}>Pending</Item>
@@ -272,13 +243,13 @@ useEffect(() => {
                 </div>
               )}
 
-              {/* EMPLOYEE ORDER */}
               <MainButton
                 section="employeeOrders"
-                icon={<Users size={16} className="inline-block mr-2" />}
+                icon={<Users size={16} />}
                 label="By Employee"
                 count={counts.employee.main}
               />
+
               {open.employeeOrders && (
                 <div className="pl-6 mt-1 space-y-1">
                   <Item to="/orders/byemployee" count={counts.employee.main}>Pending</Item>
@@ -288,19 +259,13 @@ useEffect(() => {
                   <Item to="/orders/byemployee/completed" count={counts.employee.completed}>Completed</Item>
                 </div>
               )}
-
             </div>
           )}
         </div>
 
-{/* ====================== FARMERS LIST ===================== */}
-
+        {/* FARMER LIST */}
         <div className="mt-2">
-          <MainButton
-            section="farmers"
-            icon={<Users size={16} className="inline-block mr-2" />}
-            label="Farmer List"
-          />
+          <MainButton section="farmers" icon={<Users size={16} />} label="Farmer List" />
           {open.farmers && (
             <div className="pl-6 mt-1 space-y-1">
               <Item to="/farmers/all">All</Item>
@@ -314,11 +279,11 @@ useEffect(() => {
           )}
         </div>
 
-        {/* ====================== PAYMENT ===================== */}
+        {/* PAYMENT */}
         <div className="mt-2">
           <MainButton
             section="payment"
-            icon={<CreditCard size={16} className="inline-block mr-2" />}
+            icon={<CreditCard size={16} />}
             label="Payment"
             count={counts.payment.pending + counts.payment.upcoming}
           />
@@ -330,13 +295,9 @@ useEffect(() => {
           )}
         </div>
 
-        {/* ====================== MANAGE EMPLOYEES ===================== */}
+        {/* MANAGE EMPLOYEES */}
         <div className="mt-2">
-          <MainButton
-            section="employees"
-            icon={<Users size={16} className="inline-block mr-2" />}
-            label="Manage Employees"
-          />
+          <MainButton section="employees" icon={<Users size={16} />} label="Manage Employees" />
           {open.employees && (
             <div className="pl-6 mt-1 space-y-1">
               <Item to="/employees/manage">Manager Employee</Item>
@@ -346,13 +307,9 @@ useEffect(() => {
           )}
         </div>
 
-{/* ====================== ADVERTISEMENT ===================== */}
+        {/* ADS */}
         <div className="mt-2">
-          <MainButton
-            section="ads"
-            icon={<Megaphone size={16} className="inline-block mr-2" />}
-            label="Advertisement"
-          />
+          <MainButton section="ads" icon={<Megaphone size={16} />} label="Advertisement" />
           {open.ads && (
             <div className="pl-6 mt-1 space-y-1">
               <Item to="/ads/banner">Banner Add</Item>
@@ -361,13 +318,9 @@ useEffect(() => {
           )}
         </div>
 
-{/* ====================== MANAGE PRODUCTS ===================== */}
+        {/* PRODUCTS */}
         <div className="mt-2">
-          <MainButton
-            section="products"
-            icon={<Package size={16} className="inline-block mr-2" />}
-            label="Manage Products"
-          />
+          <MainButton section="products" icon={<Package size={16} />} label="Manage Products" />
           {open.products && (
             <div className="pl-6 mt-1 space-y-1">
               <Item to="/products/category">Category</Item>
@@ -378,13 +331,9 @@ useEffect(() => {
           )}
         </div>
 
-{/* ====================== DATA ===================== */}
+        {/* DATA */}
         <div className="mt-2">
-          <MainButton
-            section="data"
-            icon={<BarChart size={16} className="inline-block mr-2" />}
-            label="Data"
-          />
+          <MainButton section="data" icon={<BarChart size={16} />} label="Data" />
           {open.data && (
             <div className="pl-6 mt-1 space-y-1">
               <Item to="/data/technical">Technical List</Item>
@@ -398,13 +347,9 @@ useEffect(() => {
           )}
         </div>
 
-{/* ====================== SETTINGS  ===================== */}
+        {/* SETTINGS */}
         <div className="mt-2">
-          <MainButton
-            section="settings"
-            icon={<Settings size={16} className="inline-block mr-2" />}
-            label="Settings"
-          />
+          <MainButton section="settings" icon={<Settings size={16} />} label="Settings" />
           {open.settings && (
             <div className="pl-6 mt-1 space-y-1">
               <Item to="/settings/profile">Profile Settings</Item>
@@ -413,17 +358,13 @@ useEffect(() => {
           )}
         </div>
 
-        {/* ====================== COMPLAINS ===================== */}
+        {/* COMPLAINS */}
         <div className="mt-2">
           <MainButton
             section="complains"
-            icon={<FileText size={16} className="inline-block mr-2" />}
+            icon={<FileText size={16} />}
             label="Complains"
-            count={
-              counts.complains.new +
-              counts.complains.pending +
-              counts.complains.technical
-            }
+            count={counts.complains.new + counts.complains.technical + counts.complains.pending}
           />
           {open.complains && (
             <div className="pl-6 mt-1 space-y-1">
@@ -435,11 +376,11 @@ useEffect(() => {
           )}
         </div>
 
-        {/* ====================== WORK MANAGEMENT ===================== */}
-         <div className="mt-2">
+        {/* WORK MANAGEMENT */}
+        <div className="mt-2">
           <MainButton
             section="workmanagement"
-            icon={<ListChecks size={16} className="inline-block mr-2" />}
+            icon={<ListChecks size={16} />}
             label="Work Management"
             count={counts.workmanagement.demo + counts.workmanagement.visit}
           />
@@ -451,13 +392,9 @@ useEffect(() => {
           )}
         </div>
 
-        {/* ====================== REPORTS ===================== */}
+        {/* REPORTS */}
         <div className="mt-2">
-          <MainButton
-            section="reports"
-            icon={<BarChart size={16} className="inline-block mr-2" />}
-            label="Reports"
-          />
+          <MainButton section="reports" icon={<BarChart size={16} />} label="Reports" />
           {open.reports && (
             <div className="pl-6 mt-1 space-y-1">
               <Item to="/reports/monthly">Monthly Report</Item>
@@ -465,9 +402,8 @@ useEffect(() => {
             </div>
           )}
         </div>
+
       </nav>
     </aside>
   );
 }
-
-

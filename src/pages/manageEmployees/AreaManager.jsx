@@ -43,7 +43,7 @@ function AreaManager() {
     const manager = managers.find((item) => item.id === id);
     if (manager) {
       localStorage.setItem("editaream", JSON.stringify(manager));
-      navigate("/employees/areamanager/addareamanager");
+      navigate("/employee/areamanager/addareamanager");
     }
   };
 
@@ -64,6 +64,14 @@ function AreaManager() {
           className="text-blue-600 hover:text-blue-800"
         >
           <i className="fas fa-edit text-lg"></i>
+        </button>
+        <button
+          onClick={()=>
+            { localStorage.setItem("editaream", JSON.stringify(item));
+              navigate("/employees/areamanager/deshboard")}}
+          className="w-6 h-6 border border-blue-400 rounded-full flex items-center justify-center cursor-pointer"
+        >
+          <i className="fa-solid fa-ellipsis text-blue-400"></i>
         </button>
       </div>
     ),

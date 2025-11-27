@@ -1,4 +1,5 @@
-import React from "react";
+// App.jsx
+import React, { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 import Dashboard from "./pages/Dashboard";
@@ -78,29 +79,47 @@ import Farmer from "./pages/cart/Farmer";
 import SendStock from "./pages/stackManagement/SendStock";
 import Godown from "./pages/data/Godown";
 import AddGodown from "./pages/data/AddGodown";
+import ManagerDesboard from "./pages/manageEmployees/managerDesboard";
+import AreaManagerDashboard from "./pages/manageEmployees/AreaManagerDashboard";
+import FieldEmployeeDashboard from "./pages/manageEmployees/FieldEmployeeDashboard";
+
+// Import Sidebar for mobile toggle
+import Sidebar from "./components/Sidebar";
 
 export default function App() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
     <div className="flex min-h-screen">
-      <Topbar />
-      <div className="flex-1 main_card  ">
+
+      {/* 📱 MOBILE MENU BUTTON */}
+      <button
+        className="md:hidden fixed top-4 left-4 z-50 bg-black text-white px-3 py-2 rounded"
+        onClick={() => setMenuOpen(!menuOpen)}
+      >
+        ☰
+      </button>
+
+      {/* SIDEBAR WITH TOGGLE */}
+      <Sidebar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+
+      <div className="flex-1 main_card">
+        <Topbar />
+
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route path="/" element={<Dashboard />} />
             <Route path="/adduser" element={<AddUsers />} />
+
             <Route path="/stack/available" element={<Available />} />
             <Route path="/stack/available/addstock" element={<AddStock />} />
             <Route path="/stack/finished" element={<Finished />} />
-            <Route
-              path="/stack/finished/addfinishedstock"
-              element={<AddFinishedStock />}
-            />
+            <Route path="/stack/finished/addfinishedstock" element={<AddFinishedStock />} />
             <Route path="/stack/lost" element={<Lost />} />
             <Route path="/stack/lost/addlost" element={<AddLost />} />
             <Route path="/stack/damaged" element={<Damaged />} />
             <Route path="/stack/damaged/adddamaged" element={<Adddamaged />} />
-            <Route path="/stack/send" element={<SendStock/>} />
-
+            <Route path="/stack/send" element={<SendStock />} />
 
             <Route path="/cart/employee" element={<Employee />} />
             <Route path="/cart/farmer" element={<Farmer />} />
@@ -108,34 +127,14 @@ export default function App() {
             <Route path="/orders/farmer" element={<FarmerOrder />} />
             <Route path="/orders/byemployee" element={<ByEmployeeOrder />} />
             <Route path="/orders/farmer/return" element={<FReturnOrder />} />
-            <Route
-              path="/orders/farmer/completed"
-              element={<FCompletedOrder />}
-            />
-            <Route
-              path="/orders/farmer/canceled"
-              element={<FCenceledOrder />}
-            />
-            <Route
-              path="/orders/farmer/rejected"
-              element={<FRejectedOrder />}
-            />
-            <Route
-              path="/orders/byemployee/return"
-              element={<EReturnOrder />}
-            />
-            <Route
-              path="/orders/byemployee/completed"
-              element={<ECompletedOrder />}
-            />
-            <Route
-              path="/orders/byemployee/canceled"
-              element={<ECenceledOrder />}
-            />
-            <Route
-              path="/orders/byemployee/rejected"
-              element={<ERejectedOrder />}
-            />
+            <Route path="/orders/farmer/completed" element={<FCompletedOrder />} />
+            <Route path="/orders/farmer/canceled" element={<FCenceledOrder />} />
+            <Route path="/orders/farmer/rejected" element={<FRejectedOrder />} />
+
+            <Route path="/orders/byemployee/return" element={<EReturnOrder />} />
+            <Route path="/orders/byemployee/completed" element={<ECompletedOrder />} />
+            <Route path="/orders/byemployee/canceled" element={<ECenceledOrder />} />
+            <Route path="/orders/byemployee/rejected" element={<ERejectedOrder />} />
 
             <Route path="/farmers/all" element={<AllFarmers />} />
             <Route path="/farmer/all/addfarmer" element={<AddFarmer />} />
@@ -153,36 +152,27 @@ export default function App() {
             <Route path="/employees/manage" element={<ManageEmployee />} />
             <Route path="/employees/manage/addmanage" element={<AddManage />} />
             <Route path="/employees/areamanager" element={<AreaManager />} />
-            <Route
-              path="/employee/areamanager/addareamanager"
-              element={<AddAreaManager />}
-            />
+            <Route path="/employee/areamanager/addareamanager" element={<AddAreaManager />} />
             <Route path="/employees/field" element={<FieldEmployee />} />
             <Route path="/employees/field/addfield" element={<Addfield />} />
+            <Route path="/employees/manage/deshboard" element={<ManagerDesboard />} />
+            <Route path="/employees/areamanager/deshboard" element={<AreaManagerDashboard />} />
+            <Route path="/employees/field/deshboard" element={<FieldEmployeeDashboard />} />
 
             <Route path="/ads/banner" element={<BannerAdd />} />
             <Route path="/ads/video" element={<VideoAdd />} />
 
             <Route path="/products/category" element={<Category />} />
-            <Route
-              path="/products/category/addcategory"
-              element={<AddCategory />}
-            />
+            <Route path="/products/category/addcategory" element={<AddCategory />} />
             <Route path="/products/list" element={<ProductList />} />
             <Route path="/products/list/addproduct" element={<AddProduct />} />
             <Route path="/products/scheme" element={<ProductScheme />} />
             <Route path="/products/scheme/addscheme" element={<AddScheme />} />
             <Route path="/products/request" element={<ProductRequest />} />
-            <Route
-              path="/products/request/addrequest"
-              element={<AddRequest />}
-            />
+            <Route path="/products/request/addrequest" element={<AddRequest />} />
 
             <Route path="/data/technical" element={<TechnicalList />} />
-            <Route
-              path="/data/technical/addtechnical"
-              element={<AddTechnical />}
-            />
+            <Route path="/data/technical/addtechnical" element={<AddTechnical />} />
             <Route path="/data/crops" element={<CropList />} />
             <Route path="/data/crops/addcrop" element={<AddCrop />} />
             <Route path="/data/insects" element={<InsectsList />} />
@@ -190,30 +180,18 @@ export default function App() {
             <Route path="/data/fungus" element={<FungusList />} />
             <Route path="/data/fungus/addfungus" element={<AddFungus />} />
             <Route path="/data/herbicide" element={<Herbicide />} />
-            <Route
-              path="/data/herbicide/addherbicide"
-              element={<AddHerbicide />}
-            />
+            <Route path="/data/herbicide/addherbicide" element={<AddHerbicide />} />
             <Route path="/data/soil" element={<SoilList />} />
             <Route path="/data/soil/addsoil" element={<AddSoil />} />
-            <Route path="/data/Godown" element={<Godown/>}/>
-            <Route path="/data/godown/add" element={<AddGodown/>}/>
+            <Route path="/data/Godown" element={<Godown />} />
+            <Route path="/data/godown/add" element={<AddGodown />} />
 
             <Route path="/complains/new" element={<NewComplaints />} />
-            <Route
-              path="/complains/new/addnewcomplaints"
-              element={<AddNewComplaints />}
-            />
+            <Route path="/complains/new/addnewcomplaints" element={<AddNewComplaints />} />
             <Route path="/complains/technical" element={<Technical />} />
-            <Route
-              path="/complains/technical/addtechnical"
-              element={<AddTech />}
-            />
+            <Route path="/complains/technical/addtechnical" element={<AddTech />} />
             <Route path="/complains/pending" element={<PendingComplaints />} />
-            <Route
-              path="/complains/completed"
-              element={<CompletedComplaints />}
-            />
+            <Route path="/complains/completed" element={<CompletedComplaints />} />
 
             <Route path="/workmanagement/demo" element={<Demo />} />
             <Route path="/workmanagement/visit" element={<Visit />} />

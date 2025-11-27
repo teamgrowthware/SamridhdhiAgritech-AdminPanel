@@ -158,7 +158,7 @@ function New() {
 
   return (
     <>
-      <div className="ml-64  min-h-screen ">
+      <div className="lg:ml-64  min-h-screen ">
         <div className="flex justify-between items-center p-4">
           <h1 className="mt-5 text-2xl font-semibold">New Farmers</h1>
 

@@ -1,13 +1,22 @@
-import React from "react";
+import React from "react"; 
 import { Bell, Search, Menu } from "lucide-react";
 
-const Topbar = ({ searchText, setSearchText }) => {
+const Topbar = ({ searchText, setSearchText, menuOpen, setMenuOpen }) => {
   return (
     <header className="fixed top-0 left-0 w-full bg-white border-b border-gray-200 shadow-sm z-50">
       <div className="flex justify-between items-center px-6 py-3">
+        
         {/* Left Section - Logo + Menu */}
         <div className="flex items-center space-x-4">
-          <Menu size={22} className="text-gray-700 cursor-pointer" />
+
+          {/* 👇 Menu Button (MOBILE SIDEBAR TOGGLE) */}
+          <button
+            className="md:hidden p-2 rounded hover:bg-gray-100"
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            <Menu size={22} className="text-gray-700" />
+          </button>
+
           <h1 className="text-lg font-bold text-green-800 tracking-wide">
             SAMRIDDHI AGROTECH
           </h1>
@@ -49,10 +58,10 @@ const Topbar = ({ searchText, setSearchText }) => {
             </div>
           </div>
         </div>
+
       </div>
     </header>
   );
 };
 
 export default Topbar;
-
